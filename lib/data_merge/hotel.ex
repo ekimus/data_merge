@@ -3,13 +3,14 @@ defmodule DataMerge.Hotel do
   use Ecto.Schema
   import Ecto.Changeset
   alias DataMerge.Hotel
+  alias DataMerge.Hotel.BookingCondition
 
-  @primary_key false
+  @primary_key {:id, :string, autogenerate: false}
   schema "hotels" do
-    field :id, :string, primary_key: true
     field :destination_id, :integer
     field :name, :string
     field :description, :string
+    has_many :booking_conditions, BookingCondition
   end
 
   @permitted ~w(id destination_id name description)a
