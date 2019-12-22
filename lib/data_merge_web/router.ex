@@ -5,7 +5,9 @@ defmodule DataMergeWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", DataMergeWeb do
+  scope "/", DataMergeWeb do
     pipe_through :api
+
+    get "/", HotelController, :index
   end
 end

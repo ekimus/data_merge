@@ -1,9 +1,9 @@
-defmodule DataMerge.Hotel.BookingConditionTest do
+defmodule DataMerge.Hotels.Hotel.BookingConditionTest do
   @moduledoc false
 
   use DataMerge.DataCase, async: true
 
-  alias DataMerge.Hotel.BookingCondition
+  alias DataMerge.Hotels.Hotel.BookingCondition
 
   describe("changeset/2") do
     @valid_attrs %{booking_condition: "booking_condition"}

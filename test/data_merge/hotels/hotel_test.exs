@@ -1,11 +1,11 @@
-defmodule DataMerge.HotelTest do
+defmodule DataMerge.Hotels.HotelTest do
   @moduledoc false
 
   use DataMerge.DataCase, async: true
 
-  alias DataMerge.Hotel
+  alias DataMerge.Hotels.Hotel
 
-  describe("changeset/2") do
+  describe "changeset/2" do
     @valid_attrs %{id: "id", destination_id: 1, name: "name", description: "description"}
 
     test "valid fields" do

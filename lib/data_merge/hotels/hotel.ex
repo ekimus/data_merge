@@ -1,9 +1,9 @@
-defmodule DataMerge.Hotel do
+defmodule DataMerge.Hotels.Hotel do
   @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
-  alias DataMerge.Hotel
-  alias DataMerge.Hotel.BookingCondition
+  alias DataMerge.Hotels.Hotel
+  alias DataMerge.Hotels.Hotel.BookingCondition
 
   @primary_key {:id, :string, autogenerate: false}
   schema "hotels" do
