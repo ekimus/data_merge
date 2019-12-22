@@ -11,6 +11,7 @@ defmodule DataMerge.HotelsTest do
     destination_id: 1,
     name: "name",
     description: "description",
+    amenities: [%{type: "type", amenity: "amenity"}],
     images: [%{type: "type", link: "link", description: "description"}],
     booking_conditions: [%{booking_condition: "booking_condition"}]
   }

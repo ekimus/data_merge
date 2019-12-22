@@ -1,6 +1,5 @@
 defmodule DataMerge.Hotels.Hotel.BookingConditionTest do
   @moduledoc false
-
   use DataMerge.DataCase, async: true
 
   alias DataMerge.Hotels.Hotel.BookingCondition

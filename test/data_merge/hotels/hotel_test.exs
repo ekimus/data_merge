@@ -11,6 +11,7 @@ defmodule DataMerge.Hotels.HotelTest do
       destination_id: 1,
       name: "name",
       description: "description",
+      amenities: [%{type: "type", amenity: "amenity"}],
       images: [%{type: "type", link: "link", description: "description"}],
       booking_conditions: [%{booking_condition: "booking_condition"}]
     }
@@ -28,6 +29,7 @@ defmodule DataMerge.Hotels.HotelTest do
                destination_id: ["can't be blank"],
                name: ["can't be blank"],
                description: ["can't be blank"],
+               amenities: ["can't be blank"],
                images: ["can't be blank"],
                booking_conditions: ["can't be blank"]
              } = errors_on(changeset)

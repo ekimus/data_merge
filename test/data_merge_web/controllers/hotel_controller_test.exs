@@ -10,6 +10,7 @@ defmodule DataMerge.HotelControllerTest do
         destination_id: 1,
         name: "name",
         description: "description",
+        amenities: [%{type: "type", amenity: "amenity"}],
         images: [%{type: "type", link: "link", description: "description"}],
         booking_conditions: [%{booking_condition: "booking_condition"}]
       })
@@ -25,6 +26,7 @@ defmodule DataMerge.HotelControllerTest do
         "destination_id" => hotel.destination_id,
         "name" => hotel.name,
         "description" => hotel.description,
+        "amenities" => Enum.group_by(hotel.amenities, & &1.type, & &1.amenity),
         "images" =>
           Enum.group_by(
             hotel.images,
