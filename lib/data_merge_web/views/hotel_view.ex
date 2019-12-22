@@ -12,7 +12,8 @@ defmodule DataMergeWeb.HotelView do
       id: hotel.id,
       destination_id: hotel.destination_id,
       name: hotel.name,
-      description: hotel.description
+      description: hotel.description,
+      booking_conditions: Enum.map(hotel.booking_conditions, & &1.booking_condition)
     }
   end
 end

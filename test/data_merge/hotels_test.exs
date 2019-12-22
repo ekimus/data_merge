@@ -6,7 +6,13 @@ defmodule DataMerge.HotelsTest do
   alias DataMerge.Hotels
   alias DataMerge.Hotels.Hotel
 
-  @attrs %{id: "id", destination_id: 1, name: "name", description: "description"}
+  @attrs %{
+    id: "id",
+    destination_id: 1,
+    name: "name",
+    description: "description",
+    booking_conditions: [%{booking_condition: "booking_condition"}]
+  }
 
   describe "create_hotel/1" do
     test "creates a hotel" do

@@ -7,7 +7,7 @@ defmodule DataMerge.Hotels.Hotel.BookingCondition do
 
   schema "booking_conditions" do
     field :booking_condition, :string
-    belongs_to :hotel, Hotel
+    belongs_to :hotel, Hotel, type: :string
   end
 
   @permitted ~w(booking_condition)a

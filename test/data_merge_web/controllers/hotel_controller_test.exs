@@ -5,7 +5,13 @@ defmodule DataMerge.HotelControllerTest do
 
   test "index/2 responds with all hotels", %{conn: conn} do
     {:ok, hotel} =
-      Hotels.create_hotel(%{id: "id", destination_id: 1, name: "name", description: "description"})
+      Hotels.create_hotel(%{
+        id: "id",
+        destination_id: 1,
+        name: "name",
+        description: "description",
+        booking_conditions: [%{booking_condition: "booking_condition"}]
+      })
 
     response =
       conn
@@ -17,7 +23,8 @@ defmodule DataMerge.HotelControllerTest do
         "id" => hotel.id,
         "destination_id" => hotel.destination_id,
         "name" => hotel.name,
-        "description" => hotel.description
+        "description" => hotel.description,
+        "booking_conditions" => Enum.map(hotel.booking_conditions, & &1.booking_condition)
       }
     ]
 

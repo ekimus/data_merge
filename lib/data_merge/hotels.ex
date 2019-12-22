@@ -35,6 +35,6 @@ defmodule DataMerge.Hotels do
 
   """
   def list_hotels do
-    Repo.all(Hotel)
+    Hotel |> preload(:booking_conditions) |> Repo.all()
   end
 end

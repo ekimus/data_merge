@@ -21,5 +21,6 @@ defmodule DataMerge.Hotels.Hotel do
     hotel
     |> cast(attrs, @permitted)
     |> validate_required(@required)
+    |> cast_assoc(:booking_conditions, required: true)
   end
 end
