@@ -13,6 +13,12 @@ defmodule DataMergeWeb.HotelView do
       destination_id: hotel.destination_id,
       name: hotel.name,
       description: hotel.description,
+      images:
+        Enum.group_by(
+          hotel.images,
+          &String.to_atom(&1.type),
+          &%{link: &1.link, description: &1.description}
+        ),
       booking_conditions: Enum.map(hotel.booking_conditions, & &1.booking_condition)
     }
   end

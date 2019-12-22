@@ -7,6 +7,6 @@ defmodule DataMerge.Repo.Migrations.CreateBooingConditions do
       add :booking_condition, :text, null: false
     end
 
-    create(index(:booking_conditions, [:hotel_id]))
+    create index(:booking_conditions, [:hotel_id])
   end
 end

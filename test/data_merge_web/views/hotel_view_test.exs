@@ -11,6 +11,7 @@ defmodule DataMergeWeb.HotelViewTest do
     destination_id: 1,
     id: "id",
     name: "name",
+    images: %{type: [%{link: "link", description: "description"}]},
     booking_conditions: ["booking_condition"]
   }
 
@@ -28,6 +29,7 @@ defmodule DataMergeWeb.HotelViewTest do
       destination_id: 1,
       name: "name",
       description: "description",
+      images: [%{type: "type", link: "link", description: "description"}],
       booking_conditions: [%{booking_condition: "booking_condition"}]
     }
 

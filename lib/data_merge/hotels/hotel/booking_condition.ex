@@ -6,8 +6,8 @@ defmodule DataMerge.Hotels.Hotel.BookingCondition do
   alias DataMerge.Hotels.Hotel.BookingCondition
 
   schema "booking_conditions" do
-    field :booking_condition, :string
     belongs_to :hotel, Hotel, type: :string
+    field :booking_condition, :string
   end
 
   @permitted ~w(booking_condition)a
