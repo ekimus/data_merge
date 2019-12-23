@@ -10,6 +10,7 @@ defmodule DataMerge.HotelsTest do
     id: "id",
     destination_id: 1,
     name: "name",
+    location: %{lat: 0.0, lng: 0.0, address: "address", city: "city", country: "country"},
     description: "description",
     amenities: [%{type: "type", amenity: "amenity"}],
     images: [%{type: "type", link: "link", description: "description"}],

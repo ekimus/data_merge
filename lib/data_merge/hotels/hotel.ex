@@ -6,11 +6,13 @@ defmodule DataMerge.Hotels.Hotel do
   alias DataMerge.Hotels.Hotel.Amenity
   alias DataMerge.Hotels.Hotel.BookingCondition
   alias DataMerge.Hotels.Hotel.Image
+  alias DataMerge.Hotels.Hotel.Location
 
   @primary_key {:id, :string, autogenerate: false}
   schema "hotels" do
     field :destination_id, :integer
     field :name, :string
+    has_one :location, Location
     field :description, :string
     has_many :images, Image
     has_many :booking_conditions, BookingCondition
@@ -25,6 +27,7 @@ defmodule DataMerge.Hotels.Hotel do
     hotel
     |> cast(attrs, @permitted)
     |> validate_required(@required)
+    |> cast_assoc(:location, required: true)
     |> cast_assoc(:amenities, required: true)
     |> cast_assoc(:images, required: true)
     |> cast_assoc(:booking_conditions, required: true)

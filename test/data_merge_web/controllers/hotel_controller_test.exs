@@ -9,6 +9,7 @@ defmodule DataMerge.HotelControllerTest do
         id: "id",
         destination_id: 1,
         name: "name",
+        location: %{lat: 0.0, lng: 0.0, address: "address", city: "city", country: "country"},
         description: "description",
         amenities: [%{type: "type", amenity: "amenity"}],
         images: [%{type: "type", link: "link", description: "description"}],
@@ -25,6 +26,13 @@ defmodule DataMerge.HotelControllerTest do
         "id" => hotel.id,
         "destination_id" => hotel.destination_id,
         "name" => hotel.name,
+        "location" => %{
+          "lat" => Decimal.to_float(hotel.location.lat),
+          "lng" => Decimal.to_float(hotel.location.lng),
+          "address" => hotel.location.address,
+          "city" => hotel.location.city,
+          "country" => hotel.location.country
+        },
         "description" => hotel.description,
         "amenities" => Enum.group_by(hotel.amenities, & &1.type, & &1.amenity),
         "images" =>

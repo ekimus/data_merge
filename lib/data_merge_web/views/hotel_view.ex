@@ -14,6 +14,13 @@ defmodule DataMergeWeb.HotelView do
       destination_id: hotel.destination_id,
       name: hotel.name,
       description: hotel.description,
+      location: %{
+        lat: Decimal.to_float(hotel.location.lat),
+        lng: Decimal.to_float(hotel.location.lng),
+        address: hotel.location.address,
+        city: hotel.location.city,
+        country: hotel.location.country
+      },
       amenities: Enum.group_by(hotel.amenities, &String.to_atom(&1.type), & &1.amenity),
       images:
         Enum.group_by(

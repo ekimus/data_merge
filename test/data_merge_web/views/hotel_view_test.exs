@@ -7,9 +7,10 @@ defmodule DataMergeWeb.HotelViewTest do
   setup [:create_hotel]
 
   @expected %{
-    description: "description",
-    destination_id: 1,
     id: "id",
+    destination_id: 1,
+    description: "description",
+    location: %{lat: 0.0, lng: 0.0, address: "address", city: "city", country: "country"},
     name: "name",
     amenities: %{type: ["amenity"]},
     images: %{type: [%{link: "link", description: "description"}]},
@@ -29,6 +30,7 @@ defmodule DataMergeWeb.HotelViewTest do
       id: "id",
       destination_id: 1,
       name: "name",
+      location: %{lat: 0.0, lng: 0.0, address: "address", city: "city", country: "country"},
       description: "description",
       amenities: [%{type: "type", amenity: "amenity"}],
       images: [%{type: "type", link: "link", description: "description"}],
