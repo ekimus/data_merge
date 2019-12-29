@@ -8,16 +8,20 @@ defmodule DataMerge.Client do
       location: %{
         lat: src["Latitude"],
         lng: src["Longitude"],
-        address: [String.trim(src["Address"]), String.trim(src["PostalCode"])] |> Enum.join(", "),
+        address:
+          [src["Address"], src["PostalCode"]]
+          |> Enum.reject(&is_nil/1)
+          |> Enum.map(&String.trim/1)
+          |> Enum.join(", ")
+          |> (&if(&1 == "", do: nil, else: &1)).(),
         city: src["City"],
         country: src["Country"]
       },
-      description: String.trim(src["Description"]),
+      description: fmap(src["Description"], &String.trim/1),
       amenities:
-        Enum.map(
-          src["Facilities"],
-          &%{type: "general", amenity: &1 |> String.trim() |> String.downcase()}
-        ),
+        src
+        |> Map.get("Facilities", [])
+        |> Enum.map(&%{type: "general", amenity: &1 |> String.trim() |> String.downcase()}),
       images: [],
       booking_conditions: []
     }
@@ -29,23 +33,28 @@ defmodule DataMerge.Client do
       destination_id: src["destination_id"],
       name: src["hotel_name"],
       location: %{
-        address: String.trim(src["location"]["address"]),
+        lat: nil,
+        lng: nil,
+        address: fmap(src["location"]["address"], &String.trim/1),
+        city: nil,
         country: src["location"]["country"]
       },
-      description: String.trim(src["details"]),
+      description: fmap(src["details"], &String.trim/1),
       amenities:
-        src["amenities"]
+        src
+        |> Map.get("amenities", %{})
         |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%{type: k, amenity: &1 |> String.trim() |> String.downcase()})
         end),
       images:
-        src["images"]
+        src
+        |> Map.get("images", %{})
         |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%{type: k, link: &1["link"], description: &1["caption"]})
         end),
-      booking_conditions: src["booking_conditions"]
+      booking_conditions: Map.get(src, "booking_conditions", [])
     }
   end
 
@@ -57,16 +66,18 @@ defmodule DataMerge.Client do
       location: %{
         lat: src["lat"],
         lng: src["lng"],
-        address: String.trim(src["address"])
+        address: fmap(src["address"], &String.trim/1),
+        city: nil,
+        country: nil
       },
-      description: String.trim(src["info"]),
+      description: fmap(src["info"], &String.trim/1),
       amenities:
-        Enum.map(
-          src["amenities"],
-          &%{type: "room", amenity: &1 |> String.trim() |> String.downcase()}
-        ),
+        src
+        |> Map.get("amenities", [])
+        |> Enum.map(&%{type: "room", amenity: &1 |> String.trim() |> String.downcase()}),
       images:
-        src["images"]
+        src
+        |> Map.get("images", %{})
         |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%{type: k, link: &1["url"], description: &1["description"]})
@@ -74,4 +85,7 @@ defmodule DataMerge.Client do
       booking_conditions: []
     }
   end
+
+  defp fmap(nil, _), do: nil
+  defp fmap(x, f), do: apply(f, [x])
 end
