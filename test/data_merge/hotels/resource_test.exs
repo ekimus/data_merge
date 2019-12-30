@@ -1,9 +1,10 @@
 defmodule DataMerge.ResourceTest do
   @moduledoc false
   use ExUnit.Case, async: true
-  alias DataMerge.Hotels.Resource
+
   alias DataMerge.Hotels.Hotel
   alias DataMerge.Hotels.Normaliser.First
+  alias DataMerge.Hotels.Resource
 
   describe "get/2" do
     test "returns normalised data" do
