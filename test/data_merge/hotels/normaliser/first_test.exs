@@ -55,7 +55,7 @@ defmodule DataMerge.Hotels.Normaliser.FirstTest do
       assert actual == expected
     end
 
-    test "nil handling" do
+    test "empty map handling" do
       expected = %Hotel{
         id: nil,
         destination_id: nil,
@@ -68,6 +68,36 @@ defmodule DataMerge.Hotels.Normaliser.FirstTest do
       }
 
       actual = First.normalise(%{})
+      assert actual == expected
+    end
+
+    test "nil handling" do
+      data = %{
+        "Id" => nil,
+        "DestinationId" => nil,
+        "Name" => nil,
+        "Latitude" => nil,
+        "Longitude" => nil,
+        "Address" => nil,
+        "City" => nil,
+        "Country" => nil,
+        "PostalCode" => nil,
+        "Description" => nil,
+        "Facilities" => nil
+      }
+
+      expected = %Hotel{
+        id: nil,
+        destination_id: nil,
+        name: nil,
+        location: %Location{lat: nil, lng: nil, address: nil, city: nil, country: nil},
+        description: nil,
+        amenities: [],
+        images: [],
+        booking_conditions: []
+      }
+
+      actual = First.normalise(data)
       assert actual == expected
     end
   end

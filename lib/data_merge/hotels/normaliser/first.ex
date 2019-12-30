@@ -30,7 +30,7 @@ defmodule DataMerge.Hotels.Normaliser.First do
       description: fmap(map["Description"], &String.trim/1),
       amenities:
         map
-        |> Map.get("Facilities", [])
+        |> (&(Map.get(&1, "Facilities", []) || [])).()
         |> Enum.map(&%Amenity{type: "general", amenity: &1 |> String.trim() |> String.downcase()}),
       images: [],
       booking_conditions: []

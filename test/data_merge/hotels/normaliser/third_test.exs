@@ -102,7 +102,7 @@ defmodule DataMerge.Hotels.Normaliser.ThirdTest do
       assert actual == expected
     end
 
-    test "nil handling" do
+    test "emtpy map handling" do
       expected = %Hotel{
         id: nil,
         destination_id: nil,
@@ -115,6 +115,34 @@ defmodule DataMerge.Hotels.Normaliser.ThirdTest do
       }
 
       actual = Third.normalise(%{})
+      assert actual == expected
+    end
+
+    test "nil handling" do
+      data = %{
+        "id" => nil,
+        "destination" => nil,
+        "name" => nil,
+        "lat" => nil,
+        "lng" => nil,
+        "address" => nil,
+        "info" => nil,
+        "amenities" => nil,
+        "images" => nil
+      }
+
+      expected = %Hotel{
+        id: nil,
+        destination_id: nil,
+        name: nil,
+        location: %Location{address: nil, city: nil, country: nil, lat: nil, lng: nil},
+        description: nil,
+        amenities: [],
+        images: [],
+        booking_conditions: []
+      }
+
+      actual = Third.normalise(data)
       assert actual == expected
     end
   end

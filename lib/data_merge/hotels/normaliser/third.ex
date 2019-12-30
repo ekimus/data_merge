@@ -1,13 +1,14 @@
 defmodule DataMerge.Hotels.Normaliser.Third do
   @moduledoc """
-  Normaliser for data from https://api.myjson.com/bins/1fva3m
+  Normaliser for data from https://api.myjson.com/bins/j6kzm
   """
+  @behaviour DataMerge.Hotels.Normaliser
+
   import DataMerge.Utils
   alias DataMerge.Hotels.Hotel
   alias DataMerge.Hotels.Hotel.Amenity
   alias DataMerge.Hotels.Hotel.Image
   alias DataMerge.Hotels.Hotel.Location
-  @behaviour DataMerge.Hotels.Normaliser
 
   @impl DataMerge.Hotels.Normaliser
   @spec normalise(map) :: DataMerge.Hotels.Hotel.t()
@@ -26,11 +27,11 @@ defmodule DataMerge.Hotels.Normaliser.Third do
       description: fmap(map["info"], &String.trim/1),
       amenities:
         map
-        |> Map.get("amenities", [])
+        |> (&(Map.get(&1, "amenities", []) || [])).()
         |> Enum.map(&%Amenity{type: "room", amenity: &1 |> String.trim() |> String.downcase()}),
       images:
         map
-        |> Map.get("images", %{})
+        |> (&(Map.get(&1, "images", %{}) || %{})).()
         |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%Image{type: k, link: &1["url"], description: &1["description"]})

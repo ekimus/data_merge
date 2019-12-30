@@ -26,19 +26,19 @@ defmodule DataMerge.Hotels.Normaliser.Second do
       description: fmap(map["details"], &String.trim/1),
       amenities:
         map
-        |> Map.get("amenities", %{})
+        |> (&(Map.get(&1, "amenities", %{}) || %{})).()
         |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%Amenity{type: k, amenity: &1 |> String.trim() |> String.downcase()})
         end),
       images:
         map
-        |> Map.get("images", %{})
+        |> (&(Map.get(&1, "images", %{}) || %{})).()
         |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%Image{type: k, link: &1["link"], description: &1["caption"]})
         end),
-      booking_conditions: Map.get(map, "booking_conditions", [])
+      booking_conditions: Map.get(map, "booking_conditions", []) || []
     }
   end
 end
