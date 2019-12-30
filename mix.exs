@@ -19,7 +19,7 @@ defmodule DataMerge.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {DataMerge.Application, []},
+      mod: {DataMerge.Application, [env: Mix.env()]},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -41,6 +41,7 @@ defmodule DataMerge.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:mojito, "~> 0.6"},
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false}
     ]
   end

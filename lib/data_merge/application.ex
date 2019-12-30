@@ -5,16 +5,24 @@ defmodule DataMerge.Application do
 
   use Application
 
-  def start(_type, _args) do
+  def start(_type, args) do
     # List all child processes to be supervised
-    children = [
-      # Start the Ecto repository
-      DataMerge.Repo,
-      # Start the endpoint when the application starts
-      DataMergeWeb.Endpoint
-      # Starts a worker by calling: DataMerge.Worker.start_link(arg)
-      # {DataMerge.Worker, arg},
-    ]
+    children =
+      [
+        # Start the Ecto repository
+        DataMerge.Repo,
+        # Start the endpoint when the application starts
+        DataMergeWeb.Endpoint
+        # Starts a worker by calling: DataMerge.Worker.start_link(arg)
+        # {DataMerge.Worker, arg},
+      ] ++
+        case args do
+          [env: :test] ->
+            [{Plug.Cowboy, scheme: :http, plug: DataMerge.MockServer, options: [port: 4001]}]
+
+          _ ->
+            []
+        end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
