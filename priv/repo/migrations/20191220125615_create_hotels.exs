@@ -9,6 +9,6 @@ defmodule DataMerge.Repo.Migrations.CreateHotels do
       add :description, :text, null: false
     end
 
-    create unique_index(:hotels, [:destination_id])
+    create index(:hotels, [:destination_id])
   end
 end

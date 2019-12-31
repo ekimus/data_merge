@@ -19,5 +19,6 @@ defmodule DataMerge.Hotels.Hotel.Amenity do
     amenity
     |> cast(attrs, @permitted)
     |> validate_required(@required)
+    |> unique_constraint(:amenity, name: :amenities_type_amenity_index)
   end
 end

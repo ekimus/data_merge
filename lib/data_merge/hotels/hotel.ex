@@ -2,11 +2,14 @@ defmodule DataMerge.Hotels.Hotel do
   @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query, warn: false
+
   alias DataMerge.Hotels.Hotel
   alias DataMerge.Hotels.Hotel.Amenity
   alias DataMerge.Hotels.Hotel.BookingCondition
   alias DataMerge.Hotels.Hotel.Image
   alias DataMerge.Hotels.Hotel.Location
+  alias DataMerge.Repo
 
   @primary_key {:id, :string, autogenerate: false}
   schema "hotels" do
@@ -28,13 +31,24 @@ defmodule DataMerge.Hotels.Hotel do
     |> cast(attrs, @permitted)
     |> validate_required(@required)
     |> cast_assoc(:location, required: true)
-    |> cast_assoc(:amenities, required: true)
     |> cast_assoc(:images, required: true)
     |> cast_assoc(:booking_conditions, required: true)
+    |> put_assoc(:amenities, attrs |> Map.get(:amenities, []) |> insert_amenities())
   end
 
-  @spec reducer(DataMerge.Hotels.Hotel.t(), DataMerge.Hotels.Hotel.t()) ::
-          DataMerge.Hotels.Hotel.t()
+  defp insert_amenities([]), do: []
+
+  defp insert_amenities(xs) do
+    types = Enum.map(xs, & &1.type)
+    amenities = Enum.map(xs, & &1.amenity)
+    _ = Repo.insert_all(Amenity, xs, on_conflict: :nothing)
+
+    Amenity
+    |> where([a], a.type in ^types)
+    |> where([a], a.amenity in ^amenities)
+    |> Repo.all()
+  end
+
   def reducer(%Hotel{} = a, %Hotel{} = b), do: Map.merge(a, b, &merger/3)
 
   defp merger(:amenities, a, b) do
