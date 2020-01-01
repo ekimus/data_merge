@@ -98,16 +98,7 @@ defmodule DataMerge.Hotels do
       |> where([a], a.amenity not in ^MapSet.to_list(all))
       |> Repo.all()
       |> Enum.reduce({[], []}, fn x, {xs, ms} ->
-        {ys, ns} =
-          remaining
-          |> Enum.map(&{String.jaro_distance(&1, x.amenity), x, &1})
-          |> Enum.reduce({[], []}, fn y, {zs, os} ->
-            case y do
-              {distance, z, o} when distance > 0.95 -> {[z | zs], [o | os]}
-              _ -> {zs, os}
-            end
-          end)
-
+        {ys, ns} = near_matches(remaining, x)
         {ys ++ xs, ns ++ ms}
       end)
 
@@ -123,5 +114,16 @@ defmodule DataMerge.Hotels do
     xs
     |> Enum.map(& &1.amenity)
     |> MapSet.new()
+  end
+
+  defp near_matches(remaining, amenity) do
+    remaining
+    |> Enum.map(&{String.jaro_distance(&1, amenity.amenity), amenity, &1})
+    |> Enum.reduce({[], []}, fn t, {xs, ms} ->
+      case t do
+        {distance, x, m} when distance > 0.95 -> {[x | xs], [m | ms]}
+        _ -> {xs, ms}
+      end
+    end)
   end
 end

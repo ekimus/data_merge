@@ -71,7 +71,7 @@ defmodule DataMerge.HotelControllerTest do
       assert [%{"id" => "id0"}, %{"id" => "id2"}] = response
     end
 
-    defp create_hotels() do
+    defp create_hotels do
       {:ok, h0} =
         Hotels.create_hotel(%{
           id: "id0",
