@@ -16,7 +16,7 @@ defmodule DataMerge.Hotels.Hotel.Location do
   end
 
   @permitted ~w(lat lng address city country)a
-  @required ~w(lat lng address city country)a
+  @required ~w(address city country)a
 
   @doc false
   def changeset(%Location{} = location, %{} = attrs) do

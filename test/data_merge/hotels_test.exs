@@ -12,7 +12,7 @@ defmodule DataMerge.HotelsTest do
     name: "name",
     location: %{lat: 0.0, lng: 0.0, address: "address", city: "city", country: "country"},
     description: "description",
-    amenities: [%{type: "type", amenity: "amenity"}],
+    amenities: [],
     images: [%{type: "type", link: "link", description: "description"}],
     booking_conditions: [%{booking_condition: "booking_condition"}]
   }

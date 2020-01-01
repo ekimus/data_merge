@@ -5,8 +5,6 @@ defmodule DataMerge.Hotels.Normaliser.First do
   @behaviour DataMerge.Hotels.Normaliser
 
   alias DataMerge.Hotels
-  alias DataMerge.Hotels.Hotel
-  alias DataMerge.Hotels.Hotel.Location
   alias DataMerge.Utils
 
   require Logger
@@ -32,11 +30,11 @@ defmodule DataMerge.Hotels.Normaliser.First do
         |> (&Logger.warn(to_string(__MODULE__) <> " unmatched amenities: " <> &1)).()
     end
 
-    %Hotel{
+    %{
       id: map["Id"],
       destination_id: map["DestinationId"],
       name: map["Name"],
-      location: %Location{
+      location: %{
         lat: map["Latitude"],
         lng: map["Longitude"],
         address:

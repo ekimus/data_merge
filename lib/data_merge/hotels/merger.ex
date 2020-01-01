@@ -2,6 +2,7 @@ defmodule DataMerge.Hotels.Merger do
   @moduledoc """
   Merger merges resources
   """
+  alias DataMerge.Hotels
   alias DataMerge.Hotels.Hotel
   alias DataMerge.Hotels.Resource
   require Logger
@@ -17,5 +18,11 @@ defmodule DataMerge.Hotels.Merger do
     |> Enum.group_by(& &1.id, & &1)
     |> Map.to_list()
     |> Enum.map(fn {_k, v} -> Enum.reduce(v, &Hotel.reducer/2) end)
+    |> Enum.each(fn x ->
+      case Hotels.create_hotel(x) do
+        {:ok, _} -> :ok
+        {:error, reason} -> reason |> inspect() |> Logger.warn()
+      end
+    end)
   end
 end

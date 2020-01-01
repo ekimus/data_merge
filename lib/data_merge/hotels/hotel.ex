@@ -33,22 +33,24 @@ defmodule DataMerge.Hotels.Hotel do
     |> validate_required(@required)
     |> cast_assoc(:location, required: true)
     |> cast_assoc(:images, required: true)
-    |> cast_assoc(:booking_conditions, required: true)
-    |> put_assoc(:amenities, attrs |> Map.get(:amenities, []) |> insert_amenities())
+    |> cast_assoc(:booking_conditions)
+    |> put_assoc(:amenities, Map.get(attrs, :amenities, []))
+
+    # |> put_assoc(:amenities, attrs |> Map.get(:amenities, []) |> insert_amenities())
   end
 
-  defp insert_amenities([]), do: []
+  # defp insert_amenities([]), do: []
 
-  defp insert_amenities(xs) do
-    _ = Repo.insert_all(Amenity, xs, on_conflict: :nothing)
-    types = Enum.map(xs, & &1.type)
-    amenities = Enum.map(xs, & &1.amenity)
+  # defp insert_amenities(xs) do
+  #   _ = Repo.insert_all(Amenity, xs, on_conflict: :nothing)
+  #   types = Enum.map(xs, & &1.type)
+  #   amenities = Enum.map(xs, & &1.amenity)
 
-    Amenity
-    |> where([a], a.type in ^types)
-    |> where([a], a.amenity in ^amenities)
-    |> Repo.all()
-  end
+  #   Amenity
+  #   |> where([a], a.type in ^types)
+  #   |> where([a], a.amenity in ^amenities)
+  #   |> Repo.all()
+  # end
 
   @spec reducer(map, map) :: map
   def reducer(%{} = a, %{} = b), do: Map.merge(a, b, &merger/3)

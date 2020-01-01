@@ -1,8 +1,6 @@
 defmodule DataMerge.Hotels.Normaliser.FirstTest do
   use DataMerge.DataCase, async: true
 
-  alias DataMerge.Hotels.Hotel
-  alias DataMerge.Hotels.Hotel.Location
   alias DataMerge.Hotels.Normaliser.First
 
   describe "normalise/1" do
@@ -27,11 +25,11 @@ defmodule DataMerge.Hotels.Normaliser.FirstTest do
     }
 
     test "returns normalised map" do
-      %Hotel{
+      %{
         id: "iJhz",
         destination_id: 5432,
         name: "Beach Villas Singapore",
-        location: %Location{
+        location: %{
           lat: 1.264751,
           lng: 103.824006,
           address: "8 Sentosa Gateway, Beach Villas, 098269",
@@ -50,11 +48,11 @@ defmodule DataMerge.Hotels.Normaliser.FirstTest do
     end
 
     test "empty map handling" do
-      expected = %Hotel{
+      expected = %{
         id: nil,
         destination_id: nil,
         name: nil,
-        location: %Location{lat: nil, lng: nil, address: nil, city: nil, country: nil},
+        location: %{lat: nil, lng: nil, address: nil, city: nil, country: nil},
         description: nil,
         amenities: [],
         images: [],
@@ -80,11 +78,11 @@ defmodule DataMerge.Hotels.Normaliser.FirstTest do
         "Facilities" => nil
       }
 
-      expected = %Hotel{
+      expected = %{
         id: nil,
         destination_id: nil,
         name: nil,
-        location: %Location{lat: nil, lng: nil, address: nil, city: nil, country: nil},
+        location: %{lat: nil, lng: nil, address: nil, city: nil, country: nil},
         description: nil,
         amenities: [],
         images: [],

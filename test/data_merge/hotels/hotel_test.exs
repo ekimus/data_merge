@@ -31,8 +31,7 @@ defmodule DataMerge.Hotels.HotelTest do
                name: ["can't be blank"],
                location: ["can't be blank"],
                description: ["can't be blank"],
-               images: ["can't be blank"],
-               booking_conditions: ["can't be blank"]
+               images: ["can't be blank"]
              } = errors_on(changeset)
     end
   end

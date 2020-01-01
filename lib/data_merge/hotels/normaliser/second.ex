@@ -5,9 +5,6 @@ defmodule DataMerge.Hotels.Normaliser.Second do
   @behaviour DataMerge.Hotels.Normaliser
 
   alias DataMerge.Hotels
-  alias DataMerge.Hotels.Hotel
-  alias DataMerge.Hotels.Hotel.Image
-  alias DataMerge.Hotels.Hotel.Location
   alias DataMerge.Utils
 
   require Logger
@@ -31,11 +28,11 @@ defmodule DataMerge.Hotels.Normaliser.Second do
         |> (&Logger.warn(to_string(__MODULE__) <> " unmatched amenities: " <> &1)).()
     end
 
-    %Hotel{
+    %{
       id: map["hotel_id"],
       destination_id: map["destination_id"],
       name: map["hotel_name"],
-      location: %Location{
+      location: %{
         lat: nil,
         lng: nil,
         address: Utils.fmap(map["location"]["address"], &String.trim/1),
@@ -49,9 +46,11 @@ defmodule DataMerge.Hotels.Normaliser.Second do
         |> (&(Map.get(&1, "images", %{}) || %{})).()
         |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
-          Enum.map(v, &%Image{type: k, link: &1["link"], description: &1["caption"]})
+          Enum.map(v, &%{type: k, link: &1["link"], description: &1["caption"]})
         end),
-      booking_conditions: Map.get(map, "booking_conditions", []) || []
+      booking_conditions:
+        (Map.get(map, "booking_conditions", []) || [])
+        |> Enum.map(&%{booking_condition: &1})
     }
   end
 end
