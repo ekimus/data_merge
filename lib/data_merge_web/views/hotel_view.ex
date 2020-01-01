@@ -2,7 +2,6 @@ defmodule DataMergeWeb.HotelView do
   use DataMergeWeb, :view
 
   alias DataMerge.Hotels.Hotel
-  require Logger
 
   def render("index.json", %{hotels: hotels}) do
     render_many(hotels, DataMergeWeb.HotelView, "hotel.json")

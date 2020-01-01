@@ -139,14 +139,14 @@ defmodule DataMerge.Hotels.HotelTest do
     test "creates union of amenities" do
       a = %Hotel{
         amenities: [
-          %Amenity{type: "general", amenity: "indoor pool"},
           %Amenity{type: "general", amenity: "business center"},
           %Amenity{type: "general", amenity: "childcare"},
-          %Amenity{type: "room", amenity: "tv"},
+          %Amenity{type: "general", amenity: "indoor pool"},
+          %Amenity{type: "room", amenity: "bath tub"},
           %Amenity{type: "room", amenity: "coffee machine"},
-          %Amenity{type: "room", amenity: "kettle"},
           %Amenity{type: "room", amenity: "iron"},
-          %Amenity{type: "room", amenity: "tub"}
+          %Amenity{type: "room", amenity: "kettle"},
+          %Amenity{type: "room", amenity: "tv"}
         ],
         images: [],
         booking_conditions: []
@@ -154,12 +154,12 @@ defmodule DataMerge.Hotels.HotelTest do
 
       b = %Hotel{
         amenities: [
-          %Amenity{type: "general", amenity: "outdoor pool"},
           %Amenity{type: "general", amenity: "business center"},
+          %Amenity{type: "general", amenity: "outdoor pool"},
           %Amenity{type: "room", amenity: "aircon"},
+          %Amenity{type: "room", amenity: "bath tub"},
           %Amenity{type: "room", amenity: "coffee machine"},
-          %Amenity{type: "room", amenity: "hair dryer"},
-          %Amenity{type: "room", amenity: "tub"}
+          %Amenity{type: "room", amenity: "hair dryer"}
         ],
         images: [],
         booking_conditions: []
@@ -172,11 +172,11 @@ defmodule DataMerge.Hotels.HotelTest do
           %Amenity{type: "general", amenity: "indoor pool"},
           %Amenity{type: "general", amenity: "outdoor pool"},
           %Amenity{type: "room", amenity: "aircon"},
+          %Amenity{type: "room", amenity: "bath tub"},
           %Amenity{type: "room", amenity: "coffee machine"},
           %Amenity{type: "room", amenity: "hair dryer"},
           %Amenity{type: "room", amenity: "iron"},
           %Amenity{type: "room", amenity: "kettle"},
-          %Amenity{type: "room", amenity: "tub"},
           %Amenity{type: "room", amenity: "tv"}
         ],
         images: [],

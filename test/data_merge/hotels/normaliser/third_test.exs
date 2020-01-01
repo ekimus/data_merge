@@ -1,8 +1,7 @@
 defmodule DataMerge.Hotels.Normaliser.ThirdTest do
-  use ExUnit.Case, async: true
+  use DataMerge.DataCase, async: true
 
   alias DataMerge.Hotels.Hotel
-  alias DataMerge.Hotels.Hotel.Amenity
   alias DataMerge.Hotels.Hotel.Image
   alias DataMerge.Hotels.Hotel.Location
   alias DataMerge.Hotels.Normaliser.Third
@@ -51,7 +50,7 @@ defmodule DataMerge.Hotels.Normaliser.ThirdTest do
     }
 
     test "returns normalised map" do
-      expected = %Hotel{
+      %Hotel{
         id: "iJhz",
         destination_id: 5432,
         name: "Beach Villas Singapore",
@@ -64,15 +63,7 @@ defmodule DataMerge.Hotels.Normaliser.ThirdTest do
         },
         description:
           "Located at the western tip of Resorts World Sentosa, guests at the Beach Villas are guaranteed privacy while they enjoy spectacular views of glittering waters. Guests will find themselves in paradise with this series of exquisite tropical sanctuaries, making it the perfect setting for an idyllic retreat. Within each villa, guests will discover living areas and bedrooms that open out to mini gardens, private timber sundecks and verandahs elegantly framing either lush greenery or an expanse of sea. Guests are assured of a superior slumber with goose feather pillows and luxe mattresses paired with 400 thread count Egyptian cotton bed linen, tastefully paired with a full complement of luxurious in-room amenities and bathrooms boasting rain showers and free-standing tubs coupled with an exclusive array of ESPA amenities and toiletries. Guests also get to enjoy complimentary day access to the facilities at Asia’s flagship spa – the world-renowned ESPA.",
-        amenities: [
-          %Amenity{type: "room", amenity: "aircon"},
-          %Amenity{type: "room", amenity: "tv"},
-          %Amenity{type: "room", amenity: "coffee machine"},
-          %Amenity{type: "room", amenity: "kettle"},
-          %Amenity{type: "room", amenity: "hair dryer"},
-          %Amenity{type: "room", amenity: "iron"},
-          %Amenity{type: "room", amenity: "tub"}
-        ],
+        amenities: amenities,
         images: [
           %Image{
             type: "amenities",
@@ -96,10 +87,11 @@ defmodule DataMerge.Hotels.Normaliser.ThirdTest do
           }
         ],
         booking_conditions: []
-      }
+      } = Third.normalise(@data)
 
-      actual = Third.normalise(@data)
-      assert actual == expected
+      expected = ["aircon", "bath tub", "coffee machine", "hair dryer", "iron", "kettle", "tv"]
+      actual = Enum.map(amenities, & &1.amenity)
+      assert Enum.reduce(expected, true, &(&2 && &1 in actual))
     end
 
     test "emtpy map handling" do

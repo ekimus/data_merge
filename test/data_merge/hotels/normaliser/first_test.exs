@@ -1,8 +1,7 @@
 defmodule DataMerge.Hotels.Normaliser.FirstTest do
-  use ExUnit.Case, async: true
+  use DataMerge.DataCase, async: true
 
   alias DataMerge.Hotels.Hotel
-  alias DataMerge.Hotels.Hotel.Amenity
   alias DataMerge.Hotels.Hotel.Location
   alias DataMerge.Hotels.Normaliser.First
 
@@ -28,7 +27,7 @@ defmodule DataMerge.Hotels.Normaliser.FirstTest do
     }
 
     test "returns normalised map" do
-      expected = %Hotel{
+      %Hotel{
         id: "iJhz",
         destination_id: 5432,
         name: "Beach Villas Singapore",
@@ -40,19 +39,14 @@ defmodule DataMerge.Hotels.Normaliser.FirstTest do
           country: "SG"
         },
         description: "This 5 star hotel is located on the coastline of Singapore.",
-        amenities: [
-          %Amenity{type: "general", amenity: "pool"},
-          %Amenity{type: "general", amenity: "businesscenter"},
-          %Amenity{type: "general", amenity: "wifi"},
-          %Amenity{type: "general", amenity: "drycleaning"},
-          %Amenity{type: "general", amenity: "breakfast"}
-        ],
+        amenities: amenities,
         images: [],
         booking_conditions: []
-      }
+      } = First.normalise(@data)
 
-      actual = First.normalise(@data)
-      assert actual == expected
+      expected = ["breakfast", "business center", "dry cleaning", "outdoor pool", "wifi"]
+      actual = Enum.map(amenities, & &1.amenity)
+      assert Enum.reduce(expected, true, &(&2 && &1 in actual))
     end
 
     test "empty map handling" do

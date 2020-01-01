@@ -1,6 +1,6 @@
 defmodule DataMerge.ResourceTest do
   @moduledoc false
-  use ExUnit.Case, async: true
+  use DataMerge.DataCase, async: true
 
   alias DataMerge.Hotels.Hotel
   alias DataMerge.Hotels.Normaliser.First

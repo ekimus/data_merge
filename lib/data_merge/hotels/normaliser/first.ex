@@ -2,15 +2,36 @@ defmodule DataMerge.Hotels.Normaliser.First do
   @moduledoc """
   Normaliser for data from https://api.myjson.com/bins/gdmqa
   """
-  import DataMerge.Utils
-  alias DataMerge.Hotels.Hotel
-  alias DataMerge.Hotels.Hotel.Amenity
-  alias DataMerge.Hotels.Hotel.Location
   @behaviour DataMerge.Hotels.Normaliser
 
+  alias DataMerge.Hotels
+  alias DataMerge.Hotels.Hotel
+  alias DataMerge.Hotels.Hotel.Location
+  alias DataMerge.Utils
+
+  require Logger
+
+  @subs %{"pool" => "outdoor pool"}
+
   @impl DataMerge.Hotels.Normaliser
-  @spec normalise(map) :: DataMerge.Hotels.Hotel.t()
   def normalise(map) do
+    {exact, near, unmatched} =
+      map
+      |> (&(Map.get(&1, "Facilities", []) || [])).()
+      |> Enum.map(&Utils.normalise/1)
+      |> Utils.substitutions(@subs)
+      |> Hotels.amenities()
+
+    case unmatched do
+      [] ->
+        :ok
+
+      xs ->
+        xs
+        |> inspect()
+        |> (&Logger.warn(to_string(__MODULE__) <> " unmatched amenities: " <> &1)).()
+    end
+
     %Hotel{
       id: map["Id"],
       destination_id: map["DestinationId"],
@@ -27,11 +48,8 @@ defmodule DataMerge.Hotels.Normaliser.First do
         city: map["City"],
         country: map["Country"]
       },
-      description: fmap(map["Description"], &String.trim/1),
-      amenities:
-        map
-        |> (&(Map.get(&1, "Facilities", []) || [])).()
-        |> Enum.map(&%Amenity{type: "general", amenity: &1 |> String.trim() |> String.downcase()}),
+      description: Utils.fmap(map["Description"], &String.trim/1),
+      amenities: exact ++ near,
       images: [],
       booking_conditions: []
     }

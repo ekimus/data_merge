@@ -5,6 +5,7 @@ defmodule DataMerge.Hotels do
 
   import Ecto.Query, warn: false
   alias DataMerge.Hotels.Hotel
+  alias DataMerge.Hotels.Hotel.Amenity
   alias DataMerge.Repo
 
   @doc """
@@ -68,5 +69,59 @@ defmodule DataMerge.Hotels do
     |> where(destination_id: ^destination_id)
     |> preload([:location, :amenities, :images, :booking_conditions])
     |> Repo.all()
+  end
+
+  @doc """
+  Returns a list of matching, near matching, and unmatched amenities
+
+  ## Examples
+
+      iex> amenities(amenities)
+      {[%Amenity{}, ...], [%Amenity{}], ["unmatched"]}
+
+  """
+  def amenities(amenities) do
+    all = MapSet.new(amenities)
+
+    exact_matches =
+      Amenity
+      |> where([a], a.amenity in ^MapSet.to_list(all))
+      |> Repo.all()
+
+    remaining =
+      exact_matches
+      |> to_map_set()
+      |> (&MapSet.difference(all, &1)).()
+
+    {near_matches, near} =
+      Amenity
+      |> where([a], a.amenity not in ^MapSet.to_list(all))
+      |> Repo.all()
+      |> Enum.reduce({[], []}, fn x, {xs, ms} ->
+        {ys, ns} =
+          remaining
+          |> Enum.map(&{String.jaro_distance(&1, x.amenity), x, &1})
+          |> Enum.reduce({[], []}, fn y, {zs, os} ->
+            case y do
+              {distance, z, o} when distance > 0.95 -> {[z | zs], [o | os]}
+              _ -> {zs, os}
+            end
+          end)
+
+        {ys ++ xs, ns ++ ms}
+      end)
+
+    unmatched =
+      remaining
+      |> MapSet.difference(MapSet.new(near))
+      |> MapSet.to_list()
+
+    {exact_matches, near_matches, unmatched}
+  end
+
+  defp to_map_set(xs) do
+    xs
+    |> Enum.map(& &1.amenity)
+    |> MapSet.new()
   end
 end
