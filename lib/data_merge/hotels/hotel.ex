@@ -26,6 +26,7 @@ defmodule DataMerge.Hotels.Hotel do
   @required ~w(id destination_id name description)a
 
   @doc false
+  @spec changeset(DataMerge.Hotels.Hotel.t(), map) :: Ecto.Changeset.t()
   def changeset(%Hotel{} = hotel, %{} = attrs) do
     hotel
     |> cast(attrs, @permitted)
@@ -39,9 +40,9 @@ defmodule DataMerge.Hotels.Hotel do
   defp insert_amenities([]), do: []
 
   defp insert_amenities(xs) do
+    _ = Repo.insert_all(Amenity, xs, on_conflict: :nothing)
     types = Enum.map(xs, & &1.type)
     amenities = Enum.map(xs, & &1.amenity)
-    _ = Repo.insert_all(Amenity, xs, on_conflict: :nothing)
 
     Amenity
     |> where([a], a.type in ^types)
@@ -49,7 +50,8 @@ defmodule DataMerge.Hotels.Hotel do
     |> Repo.all()
   end
 
-  def reducer(%Hotel{} = a, %Hotel{} = b), do: Map.merge(a, b, &merger/3)
+  @spec reducer(map, map) :: map
+  def reducer(%{} = a, %{} = b), do: Map.merge(a, b, &merger/3)
 
   defp merger(_, nil, b), do: b
   defp merger(_, a, nil), do: a
@@ -58,36 +60,19 @@ defmodule DataMerge.Hotels.Hotel do
   defp merger(:address, a, b), do: longer(a, b)
   defp merger(:country, a, b), do: longer(a, b)
   defp merger(:description, a, b), do: longer(a, b)
-  defp merger(:amenities, a, b) when is_list(a) and is_list(b), do: merge_amenities(a, b)
-  defp merger(:images, a, b) when is_list(a) and is_list(b), do: merge_images(a, b)
-  defp merger(:booking_conditions, a, b) when is_list(a) and is_list(b), do: merge_booking(a, b)
+  defp merger(:amenities, a, b) when is_list(a) and is_list(b), do: merge_on_type(a, b)
+  defp merger(:images, a, b) when is_list(a) and is_list(b), do: merge_on_type(a, b)
+  defp merger(:booking_conditions, a, b) when is_list(a) and is_list(b), do: sort_uniq(a ++ b)
   defp merger(_, _, b), do: b
 
-  defp merge_amenities(a, b) do
+  defp merge_on_type(a, b) do
     (a ++ b)
-    |> Enum.group_by(& &1.type, & &1.amenity)
+    |> Enum.group_by(& &1.type, & &1)
     |> Map.to_list()
-    |> Enum.flat_map(fn {k, v} ->
-      v
-      |> Enum.sort()
-      |> Enum.uniq()
-      |> Enum.map(&%Amenity{type: k, amenity: &1})
-    end)
+    |> Enum.flat_map(fn {_k, v} -> sort_uniq(v) end)
   end
 
-  defp merge_images(a, b) do
-    (a ++ b)
-    |> Enum.group_by(& &1.type, &%{link: &1.link, description: &1.description})
-    |> Map.to_list()
-    |> Enum.flat_map(fn {k, v} ->
-      v
-      |> Enum.sort()
-      |> Enum.uniq()
-      |> Enum.map(&%Image{type: k, link: &1.link, description: &1.description})
-    end)
-  end
-
-  defp merge_booking(a, b), do: (a ++ b) |> Enum.sort() |> Enum.uniq()
+  defp sort_uniq(xs), do: xs |> Enum.sort() |> Enum.uniq()
 
   defp longer(a, b), do: if(String.length(a) > String.length(b), do: a, else: b)
 end

@@ -4,9 +4,6 @@ defmodule DataMerge.Hotels.HotelTest do
   use DataMerge.DataCase, async: true
 
   alias DataMerge.Hotels.Hotel
-  alias DataMerge.Hotels.Hotel.Amenity
-  alias DataMerge.Hotels.Hotel.Image
-  alias DataMerge.Hotels.Hotel.Location
 
   describe "changeset/2" do
     @valid_attrs %{
@@ -42,11 +39,11 @@ defmodule DataMerge.Hotels.HotelTest do
 
   describe "reducer/2" do
     test "prefer non-nil values" do
-      a = %Hotel{
+      a = %{
         id: "id",
         destination_id: nil,
         name: "name",
-        location: %Location{
+        location: %{
           lat: nil,
           lng: 0.0,
           address: nil,
@@ -59,11 +56,11 @@ defmodule DataMerge.Hotels.HotelTest do
         booking_conditions: nil
       }
 
-      b = %Hotel{
+      b = %{
         id: nil,
         destination_id: 1,
         name: nil,
-        location: %Location{
+        location: %{
           lat: 0.0,
           lng: nil,
           address: "address",
@@ -76,11 +73,11 @@ defmodule DataMerge.Hotels.HotelTest do
         booking_conditions: []
       }
 
-      assert %Hotel{
+      assert %{
                id: "id",
                destination_id: 1,
                name: "name",
-               location: %Location{
+               location: %{
                  lat: 0.0,
                  lng: 0.0,
                  address: "address",
@@ -95,11 +92,11 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "prefer singular values from second map" do
-      a = %Hotel{
+      a = %{
         id: "id",
         destination_id: 1,
         name: "name",
-        location: %Location{
+        location: %{
           lat: 0.0,
           lng: 0.0,
           address: "address",
@@ -109,11 +106,11 @@ defmodule DataMerge.Hotels.HotelTest do
         description: "description"
       }
 
-      b = %Hotel{
+      b = %{
         id: "idx",
         destination_id: 1,
         name: "namex",
-        location: %Location{
+        location: %{
           lat: 1.0,
           lng: 1.0,
           address: "addressx",
@@ -134,15 +131,15 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "prefer longer address" do
-      a = %Hotel{location: %Location{address: "longer"}}
-      b = %Hotel{location: %Location{address: "long"}}
-      assert %Hotel{location: %Location{address: "longer"}} = Hotel.reducer(a, b)
+      a = %{location: %{address: "longer"}}
+      b = %{location: %{address: "long"}}
+      assert %{location: %{address: "longer"}} = Hotel.reducer(a, b)
     end
 
     test "prefer longer country" do
-      a = %Hotel{location: %Location{country: "longer"}}
-      b = %Hotel{location: %Location{country: "long"}}
-      assert %Hotel{location: %Location{country: "longer"}} = Hotel.reducer(a, b)
+      a = %{location: %{country: "longer"}}
+      b = %{location: %{country: "long"}}
+      assert %{location: %{country: "longer"}} = Hotel.reducer(a, b)
     end
 
     test "prefer longer description" do
@@ -152,43 +149,43 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "creates union of amenities" do
-      a = %Hotel{
+      a = %{
         amenities: [
-          %Amenity{type: "general", amenity: "business center"},
-          %Amenity{type: "general", amenity: "childcare"},
-          %Amenity{type: "general", amenity: "indoor pool"},
-          %Amenity{type: "room", amenity: "bath tub"},
-          %Amenity{type: "room", amenity: "coffee machine"},
-          %Amenity{type: "room", amenity: "iron"},
-          %Amenity{type: "room", amenity: "kettle"},
-          %Amenity{type: "room", amenity: "tv"}
+          %{type: "general", amenity: "business center"},
+          %{type: "general", amenity: "childcare"},
+          %{type: "general", amenity: "indoor pool"},
+          %{type: "room", amenity: "bath tub"},
+          %{type: "room", amenity: "coffee machine"},
+          %{type: "room", amenity: "iron"},
+          %{type: "room", amenity: "kettle"},
+          %{type: "room", amenity: "tv"}
         ]
       }
 
-      b = %Hotel{
+      b = %{
         amenities: [
-          %Amenity{type: "general", amenity: "business center"},
-          %Amenity{type: "general", amenity: "outdoor pool"},
-          %Amenity{type: "room", amenity: "aircon"},
-          %Amenity{type: "room", amenity: "bath tub"},
-          %Amenity{type: "room", amenity: "coffee machine"},
-          %Amenity{type: "room", amenity: "hair dryer"}
+          %{type: "general", amenity: "business center"},
+          %{type: "general", amenity: "outdoor pool"},
+          %{type: "room", amenity: "aircon"},
+          %{type: "room", amenity: "bath tub"},
+          %{type: "room", amenity: "coffee machine"},
+          %{type: "room", amenity: "hair dryer"}
         ]
       }
 
-      expected = %Hotel{
+      expected = %{
         amenities: [
-          %Amenity{type: "general", amenity: "business center"},
-          %Amenity{type: "general", amenity: "childcare"},
-          %Amenity{type: "general", amenity: "indoor pool"},
-          %Amenity{type: "general", amenity: "outdoor pool"},
-          %Amenity{type: "room", amenity: "aircon"},
-          %Amenity{type: "room", amenity: "bath tub"},
-          %Amenity{type: "room", amenity: "coffee machine"},
-          %Amenity{type: "room", amenity: "hair dryer"},
-          %Amenity{type: "room", amenity: "iron"},
-          %Amenity{type: "room", amenity: "kettle"},
-          %Amenity{type: "room", amenity: "tv"}
+          %{type: "general", amenity: "business center"},
+          %{type: "general", amenity: "childcare"},
+          %{type: "general", amenity: "indoor pool"},
+          %{type: "general", amenity: "outdoor pool"},
+          %{type: "room", amenity: "aircon"},
+          %{type: "room", amenity: "bath tub"},
+          %{type: "room", amenity: "coffee machine"},
+          %{type: "room", amenity: "hair dryer"},
+          %{type: "room", amenity: "iron"},
+          %{type: "room", amenity: "kettle"},
+          %{type: "room", amenity: "tv"}
         ]
       }
 
@@ -197,14 +194,14 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "creates union of images" do
-      a = %Hotel{
+      a = %{
         images: [
-          %Image{
+          %{
             type: "rooms",
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/2.jpg",
             description: "Double room"
           },
-          %Image{
+          %{
             type: "rooms",
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/3.jpg",
             description: "Double room"
@@ -212,14 +209,14 @@ defmodule DataMerge.Hotels.HotelTest do
         ]
       }
 
-      b = %Hotel{
+      b = %{
         images: [
-          %Image{
+          %{
             type: "rooms",
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/2.jpg",
             description: "Double room"
           },
-          %Image{
+          %{
             type: "site",
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/1.jpg",
             description: "Front"
@@ -227,19 +224,19 @@ defmodule DataMerge.Hotels.HotelTest do
         ]
       }
 
-      expected = %Hotel{
+      expected = %{
         images: [
-          %Image{
+          %{
             type: "rooms",
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/2.jpg",
             description: "Double room"
           },
-          %Image{
+          %{
             type: "rooms",
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/3.jpg",
             description: "Double room"
           },
-          %Image{
+          %{
             type: "site",
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/1.jpg",
             description: "Front"
@@ -252,9 +249,9 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "creates union of booking_conditions" do
-      a = %Hotel{booking_conditions: ["bar", "baz"]}
-      b = %Hotel{booking_conditions: ["bar", "foo"]}
-      expected = %Hotel{booking_conditions: ["bar", "baz", "foo"]}
+      a = %{booking_conditions: ["bar", "baz"]}
+      b = %{booking_conditions: ["bar", "foo"]}
+      expected = %{booking_conditions: ["bar", "baz", "foo"]}
       actual = Hotel.reducer(a, b)
       assert actual == expected
     end
