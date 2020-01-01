@@ -38,7 +38,7 @@ defmodule DataMerge.HotelsTest do
       xs = ["id0", "id1"]
       expected = Enum.filter(hotels, &(&1.id in xs))
       actual = Hotels.hotels(xs)
-      assert Enum.reduce(expected, true, &(&2 && &1 in actual))
+      assert Enum.all?(expected, &(&1 in actual))
     end
   end
 
@@ -48,7 +48,7 @@ defmodule DataMerge.HotelsTest do
     test "returns hotels with the given destination_id", %{hotels: hotels} do
       expected = Enum.filter(hotels, &(&1.destination_id == 1))
       actual = Hotels.destination(1)
-      assert Enum.reduce(expected, true, &(&2 && &1 in actual))
+      assert Enum.all?(expected, &(&1 in actual))
     end
   end
 

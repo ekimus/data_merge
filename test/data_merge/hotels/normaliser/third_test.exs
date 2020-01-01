@@ -88,7 +88,7 @@ defmodule DataMerge.Hotels.Normaliser.ThirdTest do
 
       expected = ["aircon", "bath tub", "coffee machine", "hair dryer", "iron", "kettle", "tv"]
       actual = Enum.map(amenities, & &1.amenity)
-      assert Enum.reduce(expected, true, &(&2 && &1 in actual))
+      assert Enum.all?(expected, &(&1 in actual))
     end
 
     test "emtpy map handling" do

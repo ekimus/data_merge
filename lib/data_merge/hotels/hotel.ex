@@ -9,7 +9,6 @@ defmodule DataMerge.Hotels.Hotel do
   alias DataMerge.Hotels.Hotel.BookingCondition
   alias DataMerge.Hotels.Hotel.Image
   alias DataMerge.Hotels.Hotel.Location
-  alias DataMerge.Repo
 
   @primary_key {:id, :string, autogenerate: false}
   schema "hotels" do

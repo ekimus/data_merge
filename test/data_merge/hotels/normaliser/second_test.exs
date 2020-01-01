@@ -119,7 +119,7 @@ defmodule DataMerge.Hotels.Normaliser.SecondTest do
       ]
 
       actual = Enum.map(amenities, & &1.amenity)
-      assert Enum.reduce(expected, true, &(&2 && &1 in actual))
+      assert Enum.all?(expected, &(&1 in actual))
     end
 
     test "empty map handling" do
