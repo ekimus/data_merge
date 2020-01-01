@@ -41,7 +41,7 @@ defmodule DataMerge.Hotels.HotelTest do
   end
 
   describe "reducer/2" do
-    test "chooses non-nil single values" do
+    test "prefer non-nil values" do
       a = %Hotel{
         id: "id",
         destination_id: nil,
@@ -54,9 +54,9 @@ defmodule DataMerge.Hotels.HotelTest do
           country: nil
         },
         description: "description",
-        amenities: [],
+        amenities: nil,
         images: [],
-        booking_conditions: []
+        booking_conditions: nil
       }
 
       b = %Hotel{
@@ -72,32 +72,29 @@ defmodule DataMerge.Hotels.HotelTest do
         },
         description: nil,
         amenities: [],
-        images: [],
+        images: nil,
         booking_conditions: []
       }
 
-      expected = %Hotel{
-        id: "id",
-        destination_id: 1,
-        name: "name",
-        location: %Location{
-          lat: 0.0,
-          lng: 0.0,
-          address: "address",
-          city: "city",
-          country: "country"
-        },
-        description: "description",
-        amenities: [],
-        images: [],
-        booking_conditions: []
-      }
-
-      actual = Hotel.reducer(a, b)
-      assert actual == expected
+      assert %Hotel{
+               id: "id",
+               destination_id: 1,
+               name: "name",
+               location: %Location{
+                 lat: 0.0,
+                 lng: 0.0,
+                 address: "address",
+                 city: "city",
+                 country: "country"
+               },
+               description: "description",
+               amenities: [],
+               images: [],
+               booking_conditions: []
+             } = Hotel.reducer(a, b)
     end
 
-    test "prefers singular values from second map" do
+    test "prefer singular values from second map" do
       a = %Hotel{
         id: "id",
         destination_id: 1,
@@ -109,10 +106,7 @@ defmodule DataMerge.Hotels.HotelTest do
           city: "city",
           country: "country"
         },
-        description: "description",
-        amenities: [],
-        images: [],
-        booking_conditions: []
+        description: "description"
       }
 
       b = %Hotel{
@@ -126,10 +120,7 @@ defmodule DataMerge.Hotels.HotelTest do
           city: "cityx",
           country: "countryx"
         },
-        description: "descriptionx",
-        amenities: [],
-        images: [],
-        booking_conditions: []
+        description: "descriptionx"
       }
 
       actual = Hotel.reducer(a, b)
@@ -137,14 +128,20 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "prefer longer name" do
-      a = %Hotel{name: "longer", amenities: [], images: [], booking_conditions: []}
-      b = %Hotel{name: "long", amenities: [], images: [], booking_conditions: []}
+      a = %Hotel{name: "longer"}
+      b = %Hotel{name: "long"}
       assert %Hotel{name: "longer"} = Hotel.reducer(a, b)
     end
 
+    test "prefer longer address" do
+      a = %Hotel{location: %Location{address: "longer"}}
+      b = %Hotel{location: %Location{address: "long"}}
+      assert %Hotel{location: %Location{address: "longer"}} = Hotel.reducer(a, b)
+    end
+
     test "prefer longer description" do
-      a = %Hotel{description: "longer", amenities: [], images: [], booking_conditions: []}
-      b = %Hotel{description: "long", amenities: [], images: [], booking_conditions: []}
+      a = %Hotel{description: "longer"}
+      b = %Hotel{description: "long"}
       assert %Hotel{description: "longer"} = Hotel.reducer(a, b)
     end
 
@@ -159,9 +156,7 @@ defmodule DataMerge.Hotels.HotelTest do
           %Amenity{type: "room", amenity: "iron"},
           %Amenity{type: "room", amenity: "kettle"},
           %Amenity{type: "room", amenity: "tv"}
-        ],
-        images: [],
-        booking_conditions: []
+        ]
       }
 
       b = %Hotel{
@@ -172,9 +167,7 @@ defmodule DataMerge.Hotels.HotelTest do
           %Amenity{type: "room", amenity: "bath tub"},
           %Amenity{type: "room", amenity: "coffee machine"},
           %Amenity{type: "room", amenity: "hair dryer"}
-        ],
-        images: [],
-        booking_conditions: []
+        ]
       }
 
       expected = %Hotel{
@@ -190,9 +183,7 @@ defmodule DataMerge.Hotels.HotelTest do
           %Amenity{type: "room", amenity: "iron"},
           %Amenity{type: "room", amenity: "kettle"},
           %Amenity{type: "room", amenity: "tv"}
-        ],
-        images: [],
-        booking_conditions: []
+        ]
       }
 
       actual = Hotel.reducer(a, b)
@@ -201,7 +192,6 @@ defmodule DataMerge.Hotels.HotelTest do
 
     test "creates union of images" do
       a = %Hotel{
-        amenities: [],
         images: [
           %Image{
             type: "rooms",
@@ -213,12 +203,10 @@ defmodule DataMerge.Hotels.HotelTest do
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/3.jpg",
             description: "Double room"
           }
-        ],
-        booking_conditions: []
+        ]
       }
 
       b = %Hotel{
-        amenities: [],
         images: [
           %Image{
             type: "rooms",
@@ -230,12 +218,10 @@ defmodule DataMerge.Hotels.HotelTest do
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/1.jpg",
             description: "Front"
           }
-        ],
-        booking_conditions: []
+        ]
       }
 
       expected = %Hotel{
-        amenities: [],
         images: [
           %Image{
             type: "rooms",
@@ -252,8 +238,7 @@ defmodule DataMerge.Hotels.HotelTest do
             link: "https://d2ey9sqrvkqdfs.cloudfront.net/0qZF/1.jpg",
             description: "Front"
           }
-        ],
-        booking_conditions: []
+        ]
       }
 
       actual = Hotel.reducer(a, b)
@@ -261,9 +246,9 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "creates union of booking_conditions" do
-      a = %Hotel{amenities: [], images: [], booking_conditions: ["bar", "baz"]}
-      b = %Hotel{amenities: [], images: [], booking_conditions: ["bar", "foo"]}
-      expected = %Hotel{amenities: [], images: [], booking_conditions: ["bar", "baz", "foo"]}
+      a = %Hotel{booking_conditions: ["bar", "baz"]}
+      b = %Hotel{booking_conditions: ["bar", "foo"]}
+      expected = %Hotel{booking_conditions: ["bar", "baz", "foo"]}
       actual = Hotel.reducer(a, b)
       assert actual == expected
     end

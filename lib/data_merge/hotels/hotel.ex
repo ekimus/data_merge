@@ -51,7 +51,18 @@ defmodule DataMerge.Hotels.Hotel do
 
   def reducer(%Hotel{} = a, %Hotel{} = b), do: Map.merge(a, b, &merger/3)
 
-  defp merger(:amenities, a, b) do
+  defp merger(_, nil, b), do: b
+  defp merger(_, a, nil), do: a
+  defp merger(:name, a, b), do: if(String.length(a) > String.length(b), do: a, else: b)
+  defp merger(:location, a, b), do: Map.merge(a, b, &merger/3)
+  defp merger(:address, a, b), do: if(String.length(a) > String.length(b), do: a, else: b)
+  defp merger(:description, a, b), do: if(String.length(a) > String.length(b), do: a, else: b)
+  defp merger(:amenities, a, b) when is_list(a) and is_list(b), do: merge_amenities(a, b)
+  defp merger(:images, a, b) when is_list(a) and is_list(b), do: merge_images(a, b)
+  defp merger(:booking_conditions, a, b) when is_list(a) and is_list(b), do: merge_booking(a, b)
+  defp merger(_, _, b), do: b
+
+  defp merge_amenities(a, b) do
     (a ++ b)
     |> Enum.group_by(& &1.type, & &1.amenity)
     |> Map.to_list()
@@ -63,7 +74,7 @@ defmodule DataMerge.Hotels.Hotel do
     end)
   end
 
-  defp merger(:images, a, b) do
+  defp merge_images(a, b) do
     (a ++ b)
     |> Enum.group_by(& &1.type, &%{link: &1.link, description: &1.description})
     |> Map.to_list()
@@ -75,11 +86,5 @@ defmodule DataMerge.Hotels.Hotel do
     end)
   end
 
-  defp merger(:booking_conditions, a, b), do: (a ++ b) |> Enum.sort() |> Enum.uniq()
-  defp merger(:location, a, b), do: Map.merge(a, b, &merger/3)
-  defp merger(_, nil, b), do: b
-  defp merger(_, a, nil), do: a
-  defp merger(:name, a, b), do: if(String.length(a) > String.length(b), do: a, else: b)
-  defp merger(:description, a, b), do: if(String.length(a) > String.length(b), do: a, else: b)
-  defp merger(_, _, b), do: b
+  defp merge_booking(a, b), do: (a ++ b) |> Enum.sort() |> Enum.uniq()
 end
