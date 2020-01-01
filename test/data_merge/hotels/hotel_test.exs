@@ -136,6 +136,12 @@ defmodule DataMerge.Hotels.HotelTest do
       assert actual == b
     end
 
+    test "prefer longer name" do
+      a = %Hotel{name: "longer", amenities: [], images: [], booking_conditions: []}
+      b = %Hotel{name: "long", amenities: [], images: [], booking_conditions: []}
+      assert %Hotel{name: "longer"} = Hotel.reducer(a, b)
+    end
+
     test "creates union of amenities" do
       a = %Hotel{
         amenities: [

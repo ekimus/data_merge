@@ -79,5 +79,6 @@ defmodule DataMerge.Hotels.Hotel do
   defp merger(:location, a, b), do: Map.merge(a, b, &merger/3)
   defp merger(_, nil, b), do: b
   defp merger(_, a, nil), do: a
+  defp merger(:name, a, b), do: if(String.length(a) > String.length(b), do: a, else: b)
   defp merger(_, _, b), do: b
 end
