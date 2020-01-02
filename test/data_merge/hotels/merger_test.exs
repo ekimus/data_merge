@@ -30,9 +30,7 @@ defmodule DataMerge.Hotels.MergerTest do
                  address: "8 Sentosa Gateway, Beach Villas, 098269",
                  city: "Singapore",
                  country: "Singapore",
-                 # Decimal<1.264751>
                  lat: lat,
-                 # Decimal<103.824006>
                  lng: lng
                },
                description:
@@ -105,6 +103,8 @@ defmodule DataMerge.Hotels.MergerTest do
                ]
              } = Hotels.get_hotel("iJhz")
 
+      assert :eq = 1.264751 |> Decimal.from_float() |> Decimal.cmp(lat)
+      assert :eq = 103.824006 |> Decimal.from_float() |> Decimal.cmp(lng)
       assert %Hotel{id: "SjyX"} = Hotels.get_hotel("SjyX")
       assert %Hotel{id: "f8c9"} = Hotels.get_hotel("f8c9")
     end
