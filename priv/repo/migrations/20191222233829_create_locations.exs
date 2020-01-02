@@ -6,9 +6,9 @@ defmodule DataMerge.Repo.Migrations.CreateLocations do
       add :hotel_id, references(:hotels, type: :string), primary_key: true
       add :lat, :decimal, null: true
       add :lng, :decimal, null: true
-      add :address, :string, null: false
-      add :city, :string, null: false
-      add :country, :string, null: false
+      add :address, :string, null: true
+      add :city, :string, null: true
+      add :country, :string, null: true
     end
   end
 end

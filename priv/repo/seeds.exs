@@ -24,7 +24,7 @@ DataMerge.Repo.insert_all(
     %{type: "general", amenity: "parking"},
     %{type: "general", amenity: "wifi"},
     %{type: "room", amenity: "aircon"},
-    %{type: "room", amenity: "bath tub"},
+    %{type: "room", amenity: "bathtub"},
     %{type: "room", amenity: "coffee machine"},
     %{type: "room", amenity: "hair dryer"},
     %{type: "room", amenity: "iron"},

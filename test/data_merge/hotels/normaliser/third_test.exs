@@ -86,7 +86,7 @@ defmodule DataMerge.Hotels.Normaliser.ThirdTest do
         booking_conditions: []
       } = Third.normalise(@data)
 
-      expected = ["aircon", "bath tub", "coffee machine", "hair dryer", "iron", "kettle", "tv"]
+      expected = ["aircon", "bathtub", "coffee machine", "hair dryer", "iron", "kettle", "tv"]
       actual = Enum.map(amenities, & &1.amenity)
       assert Enum.all?(expected, &(&1 in actual))
     end

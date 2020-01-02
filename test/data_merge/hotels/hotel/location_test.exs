@@ -11,12 +11,5 @@ defmodule DataMerge.Hotels.Hotel.LocationTest do
       changeset = Location.changeset(%Location{}, @valid_attrs)
       assert changeset.valid?
     end
-
-    test "required fields" do
-      changeset = Location.changeset(%Location{}, %{})
-
-      assert %{address: ["can't be blank"], city: ["can't be blank"], country: ["can't be blank"]} =
-               errors_on(changeset)
-    end
   end
 end

@@ -30,7 +30,6 @@ defmodule DataMerge.Hotels.HotelTest do
                destination_id: ["can't be blank"],
                name: ["can't be blank"],
                location: ["can't be blank"],
-               description: ["can't be blank"],
                images: ["can't be blank"]
              } = errors_on(changeset)
     end
@@ -153,7 +152,7 @@ defmodule DataMerge.Hotels.HotelTest do
           %{type: "general", amenity: "business center"},
           %{type: "general", amenity: "childcare"},
           %{type: "general", amenity: "indoor pool"},
-          %{type: "room", amenity: "bath tub"},
+          %{type: "room", amenity: "bathtub"},
           %{type: "room", amenity: "coffee machine"},
           %{type: "room", amenity: "iron"},
           %{type: "room", amenity: "kettle"},
@@ -166,7 +165,7 @@ defmodule DataMerge.Hotels.HotelTest do
           %{type: "general", amenity: "business center"},
           %{type: "general", amenity: "outdoor pool"},
           %{type: "room", amenity: "aircon"},
-          %{type: "room", amenity: "bath tub"},
+          %{type: "room", amenity: "bathtub"},
           %{type: "room", amenity: "coffee machine"},
           %{type: "room", amenity: "hair dryer"}
         ]
@@ -179,7 +178,7 @@ defmodule DataMerge.Hotels.HotelTest do
           %{type: "general", amenity: "indoor pool"},
           %{type: "general", amenity: "outdoor pool"},
           %{type: "room", amenity: "aircon"},
-          %{type: "room", amenity: "bath tub"},
+          %{type: "room", amenity: "bathtub"},
           %{type: "room", amenity: "coffee machine"},
           %{type: "room", amenity: "hair dryer"},
           %{type: "room", amenity: "iron"},

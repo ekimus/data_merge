@@ -22,7 +22,7 @@ defmodule DataMerge.Hotels.Hotel do
   end
 
   @permitted ~w(id destination_id name description)a
-  @required ~w(id destination_id name description)a
+  @required ~w(id destination_id name)a
 
   @doc false
   @spec changeset(DataMerge.Hotels.Hotel.t(), map) :: Ecto.Changeset.t()

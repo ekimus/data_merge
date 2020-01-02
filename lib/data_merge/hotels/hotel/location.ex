@@ -16,12 +16,9 @@ defmodule DataMerge.Hotels.Hotel.Location do
   end
 
   @permitted ~w(lat lng address city country)a
-  @required ~w(address city country)a
 
   @doc false
   def changeset(%Location{} = location, %{} = attrs) do
-    location
-    |> cast(attrs, @permitted)
-    |> validate_required(@required)
+    cast(location, attrs, @permitted)
   end
 end

@@ -13,14 +13,23 @@ defmodule DataMerge.Hotels.Merger do
   def merge(resources) do
     resources
     |> Task.async_stream(Resource, :get, [], ordered: false)
-    |> Stream.each(fn
-      {:ok, {:ok, result}} -> result |> inspect() |> Logger.debug()
-      {:ok, {:error, reason}} -> reason |> inspect() |> Logger.warn()
-      {:error, reason} -> reason |> inspect() |> Logger.warn()
+    |> Flow.from_enumerable(max_demand: 20)
+    |> Flow.flat_map(fn
+      {:ok, {:ok, result}} ->
+        result |> inspect() |> Logger.debug()
+        result
+
+      {:ok, {:error, reason}} ->
+        reason |> inspect() |> Logger.warn()
+        []
+
+      {:error, reason} ->
+        reason |> inspect() |> Logger.warn()
+        []
     end)
-    |> Stream.flat_map(fn {:ok, {:ok, result}} -> result end)
-    |> Enum.group_by(& &1.id, & &1)
-    |> Enum.map(fn {k, v} ->
+    |> Flow.partition(key: {:key, :id})
+    |> Flow.group_by(& &1.id, & &1)
+    |> Flow.map(fn {k, v} ->
       case Hotels.get_hotel(k) do
         nil ->
           v |> Enum.reduce(&Hotel.reducer/2) |> Hotels.create_hotel()
@@ -31,6 +40,18 @@ defmodule DataMerge.Hotels.Merger do
           |> (&Hotels.update_hotel(hotel, &1)).()
       end
     end)
+    |> Flow.partition()
+    |> Flow.reduce(fn -> [] end, fn result, hotels ->
+      case result do
+        {:ok, hotel} ->
+          [hotel | hotels]
+
+        {:error, reason} ->
+          reason |> inspect() |> Logger.warn()
+          hotels
+      end
+    end)
+    |> Enum.reverse()
   end
 
   defp to_plain_map(%Hotel{} = hotel) do

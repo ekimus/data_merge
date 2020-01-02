@@ -9,7 +9,7 @@ defmodule DataMerge.Hotels.Normaliser.Third do
 
   require Logger
 
-  @subs %{"tub" => "bath tub"}
+  @subs %{"tub" => "bathtub"}
 
   @impl DataMerge.Hotels.Normaliser
   def normalise(%{} = map) do
