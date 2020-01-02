@@ -43,6 +43,8 @@ defmodule DataMerge.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:mojito, "~> 0.6"},
       {:flow, "~> 0.15"},
+      {:quantum, "~> 2.3"},
+      {:timex, "~> 3.0"},
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false}
     ]
   end

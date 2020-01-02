@@ -8,7 +8,7 @@ defmodule DataMerge.ResourceTest do
   describe "get/2" do
     test "returns normalised data" do
       assert {:ok, [%{id: "iJhz"}, %{id: "SjyX"}, %{id: "f8c9"}]} =
-               Resource.get(%Resource{uri: "http://localhost:4001/gdmqa", normaliser: First})
+               Resource.get(%{uri: "http://localhost:4001/gdmqa", normaliser: First})
     end
   end
 end

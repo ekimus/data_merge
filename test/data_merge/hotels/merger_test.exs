@@ -11,13 +11,13 @@ defmodule DataMerge.Hotels.MergerTest do
   alias DataMerge.Hotels.Normaliser.First
   alias DataMerge.Hotels.Normaliser.Second
   alias DataMerge.Hotels.Normaliser.Third
-  alias DataMerge.Hotels.Resource
 
   @resources [
-    %Resource{uri: "http://localhost:4001/gdmqa", normaliser: First},
-    %Resource{uri: "http://localhost:4001/1fva3m", normaliser: Second},
-    %Resource{uri: "http://localhost:4001/j6kzm", normaliser: Third}
+    %{uri: "http://localhost:4001/gdmqa", normaliser: First},
+    %{uri: "http://localhost:4001/1fva3m", normaliser: Second},
+    %{uri: "http://localhost:4001/j6kzm", normaliser: Third}
   ]
+
   describe "merge/1" do
     test "merges resources and saves to database" do
       Merger.merge(@resources)
@@ -110,7 +110,7 @@ defmodule DataMerge.Hotels.MergerTest do
     end
 
     test "merges new data" do
-      Merger.merge([%Resource{uri: "http://localhost:4001/j6kzm", normaliser: Third}])
+      Merger.merge([%{uri: "http://localhost:4001/j6kzm", normaliser: Third}])
       assert %Hotel{id: "iJhz"} = Hotels.get_hotel("iJhz")
       assert %Hotel{id: "f8c9"} = Hotels.get_hotel("f8c9")
 

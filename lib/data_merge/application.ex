@@ -12,9 +12,10 @@ defmodule DataMerge.Application do
         # Start the Ecto repository
         DataMerge.Repo,
         # Start the endpoint when the application starts
-        DataMergeWeb.Endpoint
+        DataMergeWeb.Endpoint,
         # Starts a worker by calling: DataMerge.Worker.start_link(arg)
         # {DataMerge.Worker, arg},
+        DataMerge.Scheduler
       ] ++
         case args do
           [env: :test] ->

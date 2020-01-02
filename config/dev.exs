@@ -9,6 +9,31 @@ config :data_merge, DataMerge.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :data_merge, DataMerge.Scheduler,
+  jobs: [
+    resources: [
+      schedule: "* * * * *",
+      task:
+        {DataMerge.Hotels.Merger, :merge,
+         [
+           [
+             %{
+               uri: "https://api.myjson.com/bins/gdmqa",
+               normaliser: DataMerge.Hotels.Normaliser.First
+             },
+             %{
+               uri: "https://api.myjson.com/bins/1fva3m",
+               normaliser: DataMerge.Hotels.Normaliser.Second
+             },
+             %{
+               uri: "https://api.myjson.com/bins/j6kzm",
+               normaliser: DataMerge.Hotels.Normaliser.Third
+             }
+           ]
+         ]}
+    ]
+  ]
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
