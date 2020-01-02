@@ -46,7 +46,6 @@ defmodule DataMerge.Hotels.Normaliser.Third do
       images:
         map
         |> (&(Map.get(&1, "images", %{}) || %{})).()
-        |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%{type: k, link: &1["url"], description: &1["description"]})
         end),

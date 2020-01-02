@@ -14,7 +14,6 @@ defmodule DataMerge.Hotels.Normaliser.Second do
     {exact, near, unmatched} =
       map
       |> (&(Map.get(&1, "amenities", %{}) || %{})).()
-      |> Map.to_list()
       |> Enum.flat_map(fn {_, v} -> Enum.map(v, &Utils.normalise/1) end)
       |> Hotels.amenities()
 
@@ -44,7 +43,6 @@ defmodule DataMerge.Hotels.Normaliser.Second do
       images:
         map
         |> (&(Map.get(&1, "images", %{}) || %{})).()
-        |> Map.to_list()
         |> Enum.flat_map(fn {k, v} ->
           Enum.map(v, &%{type: k, link: &1["link"], description: &1["caption"]})
         end),

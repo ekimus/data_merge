@@ -14,10 +14,10 @@ defmodule DataMerge.Hotels.Hotel do
   schema "hotels" do
     field :destination_id, :integer
     field :name, :string
-    has_one :location, Location
+    has_one :location, Location, on_replace: :delete
     field :description, :string
-    has_many :images, Image
-    has_many :booking_conditions, BookingCondition
+    has_many :images, Image, on_replace: :delete
+    has_many :booking_conditions, BookingCondition, on_replace: :delete
     many_to_many :amenities, Amenity, join_through: "hotel_amenities"
   end
 
@@ -54,7 +54,6 @@ defmodule DataMerge.Hotels.Hotel do
   defp merge_on_type(a, b) do
     (a ++ b)
     |> Enum.group_by(& &1.type, & &1)
-    |> Map.to_list()
     |> Enum.flat_map(fn {_k, v} -> sort_uniq(v) end)
   end
 

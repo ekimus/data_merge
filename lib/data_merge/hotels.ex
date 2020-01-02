@@ -20,10 +20,28 @@ defmodule DataMerge.Hotels do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_hotel(attrs) do
+  def create_hotel(%{} = attrs) do
     %Hotel{}
     |> Hotel.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Updates a hotel.
+
+  ## Examples
+
+      iex> update_hotel(%Hotel{}, %{field: value})
+      {:ok, %Hotel{}}
+
+      iex> update_hotel(%Hotel{}, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_hotel(%Hotel{} = hotel, %{} = attrs) do
+    hotel
+    |> Hotel.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -36,7 +54,9 @@ defmodule DataMerge.Hotels do
 
   """
   def list_hotels do
-    Hotel |> preload([:location, :amenities, :images, :booking_conditions]) |> Repo.all()
+    Hotel
+    |> preload([:location, :amenities, :images, :booking_conditions])
+    |> Repo.all()
   end
 
   @doc """
@@ -69,6 +89,21 @@ defmodule DataMerge.Hotels do
     |> where(destination_id: ^destination_id)
     |> preload([:location, :amenities, :images, :booking_conditions])
     |> Repo.all()
+  end
+
+  @doc """
+  Returns a hotel with the given id.
+
+  ## Examples
+
+      iex> get_hotels(id)
+      %Hotel{}
+
+  """
+  def get_hotel(id) do
+    Hotel
+    |> preload([:location, :amenities, :images, :booking_conditions])
+    |> Repo.get(id)
   end
 
   @doc """

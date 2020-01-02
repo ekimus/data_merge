@@ -23,6 +23,15 @@ defmodule DataMerge.HotelsTest do
     end
   end
 
+  describe "update_hotel/2" do
+    test "updates a hotel" do
+      {:ok, hotel} = Hotels.create_hotel(@attrs)
+
+      assert {:ok, %Hotel{name: "new name"}} =
+               Hotels.update_hotel(hotel, %{@attrs | name: "new name"})
+    end
+  end
+
   describe "list_hotels/0" do
     test "returns a list of hotels" do
       {:ok, hotel} = Hotels.create_hotel(@attrs)
@@ -49,6 +58,14 @@ defmodule DataMerge.HotelsTest do
       expected = Enum.filter(hotels, &(&1.destination_id == 1))
       actual = Hotels.destination(1)
       assert Enum.all?(expected, &(&1 in actual))
+    end
+  end
+
+  describe "get_hotel/1" do
+    test "returns a hotel with the given id" do
+      {:ok, hotel} = Hotels.create_hotel(@attrs)
+      actual = Hotels.get_hotel(hotel.id)
+      assert hotel == actual
     end
   end
 
