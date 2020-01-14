@@ -1,6 +1,5 @@
 defmodule DataMergeWeb.HotelView do
   use DataMergeWeb, :view
-  require Logger
 
   alias DataMerge.Hotels.Hotel
 
@@ -9,17 +8,14 @@ defmodule DataMergeWeb.HotelView do
   end
 
   def render("hotel.json", %{hotel: %Hotel{} = hotel}) do
-    lat = if is_nil(hotel.location.lat), do: nil, else: Decimal.to_float(hotel.location.lat)
-    lng = if is_nil(hotel.location.lng), do: nil, else: Decimal.to_float(hotel.location.lng)
-
     %{
       id: hotel.id,
       destination_id: hotel.destination_id,
       name: hotel.name,
       description: hotel.description,
       location: %{
-        lat: lat,
-        lng: lng,
+        lat: DataMerge.Utils.fmap(hotel.location.lat, &Decimal.to_float/1),
+        lng: DataMerge.Utils.fmap(hotel.location.lng, &Decimal.to_float/1),
         address: hotel.location.address,
         city: hotel.location.city,
         country: hotel.location.country
