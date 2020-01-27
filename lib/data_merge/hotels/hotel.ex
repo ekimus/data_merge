@@ -18,7 +18,7 @@ defmodule DataMerge.Hotels.Hotel do
     field :description, :string
     has_many :images, Image, on_replace: :delete
     has_many :booking_conditions, BookingCondition, on_replace: :delete
-    many_to_many :amenities, Amenity, join_through: "hotel_amenities"
+    many_to_many :amenities, Amenity, join_through: "hotel_amenities", on_replace: :delete
   end
 
   @permitted ~w(id destination_id name description)a

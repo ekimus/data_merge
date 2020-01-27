@@ -61,7 +61,7 @@ defmodule DataMerge.Hotels.Merger do
       name: hotel.name,
       location: to_plain_map(hotel.location),
       description: hotel.description,
-      amenities: hotel.amenities,
+      amenities: [],
       images: to_plain_map(hotel.images),
       booking_conditions: to_plain_map(hotel.booking_conditions)
     }

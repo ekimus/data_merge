@@ -13,9 +13,9 @@ defmodule DataMerge.Hotels.MergerTest do
   alias DataMerge.Hotels.Normaliser.Third
 
   @resources [
-    %{uri: "http://localhost:4001/gdmqa", normaliser: First},
-    %{uri: "http://localhost:4001/1fva3m", normaliser: Second},
-    %{uri: "http://localhost:4001/j6kzm", normaliser: Third}
+    %{uri: "http://localhost:4001/gdmqa.json", normaliser: First},
+    %{uri: "http://localhost:4001/1fva3m.json", normaliser: Second},
+    %{uri: "http://localhost:4001/j6kzm.json", normaliser: Third}
   ]
 
   describe "merge/1" do
@@ -110,7 +110,7 @@ defmodule DataMerge.Hotels.MergerTest do
     end
 
     test "merges new data" do
-      Merger.merge([%{uri: "http://localhost:4001/j6kzm", normaliser: Third}])
+      Merger.merge([%{uri: "http://localhost:4001/j6kzm.json", normaliser: Third}])
       assert %Hotel{id: "iJhz"} = Hotels.get_hotel("iJhz")
       assert %Hotel{id: "f8c9"} = Hotels.get_hotel("f8c9")
 
@@ -118,6 +118,40 @@ defmodule DataMerge.Hotels.MergerTest do
       assert %Hotel{id: "iJhz"} = Hotels.get_hotel("iJhz")
       assert %Hotel{id: "SjyX"} = Hotels.get_hotel("SjyX")
       assert %Hotel{id: "f8c9"} = Hotels.get_hotel("f8c9")
+    end
+
+    test "ignore stored amenities" do
+      Merger.merge([%{uri: "http://localhost:4001/j6kzm.json", normaliser: Third}])
+
+      assert %Hotel{
+               id: "iJhz",
+               amenities: [
+                 %Amenity{type: "room", amenity: "aircon"},
+                 %Amenity{type: "room", amenity: "bathtub"},
+                 %Amenity{type: "room", amenity: "coffee machine"},
+                 %Amenity{type: "room", amenity: "hair dryer"},
+                 %Amenity{type: "room", amenity: "iron"},
+                 %Amenity{type: "room", amenity: "kettle"},
+                 %Amenity{type: "room", amenity: "tv"}
+               ]
+             } = Hotels.get_hotel("iJhz")
+
+      Merger.merge([%{uri: "http://localhost:4001/1fva3m.json", normaliser: Second}])
+
+      assert %Hotel{
+               id: "iJhz",
+               amenities: [
+                 %Amenity{type: "room", amenity: "coffee machine"},
+                 %Amenity{type: "room", amenity: "hair dryer"},
+                 %Amenity{type: "room", amenity: "iron"},
+                 %Amenity{type: "room", amenity: "kettle"},
+                 %Amenity{type: "room", amenity: "tv"},
+                 %Amenity{type: "general", amenity: "business center"},
+                 %Amenity{type: "general", amenity: "childcare"},
+                 %Amenity{type: "general", amenity: "indoor pool"},
+                 %Amenity{type: "general", amenity: "outdoor pool"}
+               ]
+             } = Hotels.get_hotel("iJhz")
     end
   end
 end
