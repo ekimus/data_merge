@@ -34,13 +34,11 @@ defmodule DataMerge.Hotels.Normaliser.Third do
       id: map["id"],
       destination_id: map["destination"],
       name: map["name"],
-      location: %{
-        lat: map["lat"],
-        lng: map["lng"],
-        address: Utils.fmap(map["address"], &String.trim/1),
-        city: nil,
-        country: nil
-      },
+      lat: map["lat"],
+      lng: map["lng"],
+      address: Utils.fmap(map["address"], &String.trim/1),
+      city: nil,
+      country: nil,
       description: Utils.fmap(map["info"], &String.trim/1),
       amenities: exact ++ near,
       images:

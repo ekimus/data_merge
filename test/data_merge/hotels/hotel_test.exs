@@ -10,7 +10,11 @@ defmodule DataMerge.Hotels.HotelTest do
       id: "id",
       destination_id: 1,
       name: "name",
-      location: %{lat: 0.0, lng: 0.0, address: "address", city: "city", country: "country"},
+      lat: 0.0,
+      lng: 0.0,
+      address: "address",
+      city: "city",
+      country: "country",
       description: "description",
       amenities: [%{type: "type", amenity: "amenity"}],
       images: [%{type: "type", link: "link", description: "description"}],
@@ -29,7 +33,6 @@ defmodule DataMerge.Hotels.HotelTest do
                id: ["can't be blank"],
                destination_id: ["can't be blank"],
                name: ["can't be blank"],
-               location: ["can't be blank"],
                images: ["can't be blank"]
              } = errors_on(changeset)
     end
@@ -41,13 +44,11 @@ defmodule DataMerge.Hotels.HotelTest do
         id: "id",
         destination_id: nil,
         name: "name",
-        location: %{
-          lat: nil,
-          lng: 0.0,
-          address: nil,
-          city: "city",
-          country: nil
-        },
+        lat: nil,
+        lng: 0.0,
+        address: nil,
+        city: "city",
+        country: nil,
         description: "description",
         amenities: nil,
         images: [],
@@ -58,13 +59,11 @@ defmodule DataMerge.Hotels.HotelTest do
         id: nil,
         destination_id: 1,
         name: nil,
-        location: %{
-          lat: 0.0,
-          lng: nil,
-          address: "address",
-          city: nil,
-          country: "country"
-        },
+        lat: 0.0,
+        lng: nil,
+        address: "address",
+        city: nil,
+        country: "country",
         description: nil,
         amenities: [],
         images: nil,
@@ -75,13 +74,11 @@ defmodule DataMerge.Hotels.HotelTest do
                id: "id",
                destination_id: 1,
                name: "name",
-               location: %{
-                 lat: 0.0,
-                 lng: 0.0,
-                 address: "address",
-                 city: "city",
-                 country: "country"
-               },
+               lat: 0.0,
+               lng: 0.0,
+               address: "address",
+               city: "city",
+               country: "country",
                description: "description",
                amenities: [],
                images: [],
@@ -94,13 +91,11 @@ defmodule DataMerge.Hotels.HotelTest do
         id: "id",
         destination_id: 1,
         name: "name",
-        location: %{
-          lat: 0.0,
-          lng: 0.0,
-          address: "address",
-          city: "city",
-          country: "country"
-        },
+        lat: 0.0,
+        lng: 0.0,
+        address: "address",
+        city: "city",
+        country: "country",
         description: "description"
       }
 
@@ -108,13 +103,11 @@ defmodule DataMerge.Hotels.HotelTest do
         id: "idx",
         destination_id: 1,
         name: "namex",
-        location: %{
-          lat: 1.0,
-          lng: 1.0,
-          address: "addressx",
-          city: "cityx",
-          country: "countryx"
-        },
+        lat: 1.0,
+        lng: 1.0,
+        address: "addressx",
+        city: "cityx",
+        country: "countryx",
         description: "descriptionx"
       }
 
@@ -129,15 +122,15 @@ defmodule DataMerge.Hotels.HotelTest do
     end
 
     test "prefer longer address" do
-      a = %{location: %{address: "longer"}}
-      b = %{location: %{address: "long"}}
-      assert %{location: %{address: "longer"}} = Hotel.reducer(a, b)
+      a = %{address: "longer"}
+      b = %{address: "long"}
+      assert %{address: "longer"} = Hotel.reducer(a, b)
     end
 
     test "prefer longer country" do
-      a = %{location: %{country: "longer"}}
-      b = %{location: %{country: "long"}}
-      assert %{location: %{country: "longer"}} = Hotel.reducer(a, b)
+      a = %{country: "longer"}
+      b = %{country: "long"}
+      assert %{country: "longer"} = Hotel.reducer(a, b)
     end
 
     test "prefer longer description" do

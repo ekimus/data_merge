@@ -31,13 +31,11 @@ defmodule DataMerge.Hotels.Normaliser.Second do
       id: map["hotel_id"],
       destination_id: map["destination_id"],
       name: map["hotel_name"],
-      location: %{
-        lat: nil,
-        lng: nil,
-        address: Utils.fmap(map["location"]["address"], &String.trim/1),
-        city: nil,
-        country: map["location"]["country"]
-      },
+      lat: nil,
+      lng: nil,
+      address: Utils.fmap(map["location"]["address"], &String.trim/1),
+      city: nil,
+      country: map["location"]["country"],
       description: Utils.fmap(map["details"], &String.trim/1),
       amenities: exact ++ near,
       images:

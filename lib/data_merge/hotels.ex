@@ -55,7 +55,7 @@ defmodule DataMerge.Hotels do
   """
   def list_hotels do
     Hotel
-    |> preload([:location, :amenities, :images, :booking_conditions])
+    |> preload([:amenities, :images, :booking_conditions])
     |> Repo.all()
   end
 
@@ -71,7 +71,7 @@ defmodule DataMerge.Hotels do
   def hotels(ids) do
     Hotel
     |> where([h], h.id in ^ids)
-    |> preload([:location, :amenities, :images, :booking_conditions])
+    |> preload([:amenities, :images, :booking_conditions])
     |> Repo.all()
   end
 
@@ -87,7 +87,7 @@ defmodule DataMerge.Hotels do
   def destination(destination_id) do
     Hotel
     |> where(destination_id: ^destination_id)
-    |> preload([:location, :amenities, :images, :booking_conditions])
+    |> preload([:amenities, :images, :booking_conditions])
     |> Repo.all()
   end
 
@@ -102,7 +102,7 @@ defmodule DataMerge.Hotels do
   """
   def get_hotel(id) do
     Hotel
-    |> preload([:location, :amenities, :images, :booking_conditions])
+    |> preload([:amenities, :images, :booking_conditions])
     |> Repo.get(id)
   end
 

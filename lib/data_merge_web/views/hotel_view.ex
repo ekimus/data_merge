@@ -13,13 +13,11 @@ defmodule DataMergeWeb.HotelView do
       destination_id: hotel.destination_id,
       name: hotel.name,
       description: hotel.description,
-      location: %{
-        lat: DataMerge.Utils.fmap(hotel.location.lat, &Decimal.to_float/1),
-        lng: DataMerge.Utils.fmap(hotel.location.lng, &Decimal.to_float/1),
-        address: hotel.location.address,
-        city: hotel.location.city,
-        country: hotel.location.country
-      },
+      lat: DataMerge.Utils.fmap(hotel.lat, &Decimal.to_float/1),
+      lng: DataMerge.Utils.fmap(hotel.lng, &Decimal.to_float/1),
+      address: hotel.address,
+      city: hotel.city,
+      country: hotel.country,
       amenities: Enum.group_by(hotel.amenities, &String.to_atom(&1.type), & &1.amenity),
       images:
         Enum.group_by(

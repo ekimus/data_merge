@@ -34,18 +34,16 @@ defmodule DataMerge.Hotels.Normaliser.First do
       id: map["Id"],
       destination_id: map["DestinationId"],
       name: map["Name"],
-      location: %{
-        lat: map["Latitude"],
-        lng: map["Longitude"],
-        address:
-          [map["Address"], map["PostalCode"]]
-          |> Enum.reject(&is_nil/1)
-          |> Enum.map(&String.trim/1)
-          |> Enum.join(", ")
-          |> (&if(&1 == "", do: nil, else: &1)).(),
-        city: map["City"],
-        country: map["Country"]
-      },
+      lat: map["Latitude"],
+      lng: map["Longitude"],
+      address:
+        [map["Address"], map["PostalCode"]]
+        |> Enum.reject(&is_nil/1)
+        |> Enum.map(&String.trim/1)
+        |> Enum.join(", ")
+        |> (&if(&1 == "", do: nil, else: &1)).(),
+      city: map["City"],
+      country: map["Country"],
       description: Utils.fmap(map["Description"], &String.trim/1),
       amenities: exact ++ near,
       images: [],

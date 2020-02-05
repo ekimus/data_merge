@@ -6,7 +6,6 @@ defmodule DataMerge.Hotels.Merger do
   alias DataMerge.Hotels.Hotel
   alias DataMerge.Hotels.Hotel.BookingCondition
   alias DataMerge.Hotels.Hotel.Image
-  alias DataMerge.Hotels.Hotel.Location
   alias DataMerge.Hotels.Resource
   require Logger
 
@@ -59,21 +58,15 @@ defmodule DataMerge.Hotels.Merger do
       id: hotel.id,
       destination_id: hotel.destination_id,
       name: hotel.name,
-      location: to_plain_map(hotel.location),
+      lat: hotel.lat,
+      lng: hotel.lng,
+      address: hotel.address,
+      city: hotel.city,
+      country: hotel.country,
       description: hotel.description,
       amenities: [],
       images: to_plain_map(hotel.images),
       booking_conditions: []
-    }
-  end
-
-  defp to_plain_map(%Location{} = location) do
-    %{
-      lat: location.lat,
-      lng: location.lng,
-      address: location.address,
-      city: location.city,
-      country: location.country
     }
   end
 
