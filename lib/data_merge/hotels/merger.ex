@@ -9,6 +9,7 @@ defmodule DataMerge.Hotels.Merger do
   alias DataMerge.Hotels.Resource
   require Logger
 
+  @spec merge([DataMerge.Hotels.Resource.t()]) :: [DataMerge.Hotels.Hotel.t()]
   def merge(resources) do
     resources
     |> Task.async_stream(Resource, :get, [], ordered: false)

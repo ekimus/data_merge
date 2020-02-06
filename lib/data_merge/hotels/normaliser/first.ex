@@ -12,6 +12,7 @@ defmodule DataMerge.Hotels.Normaliser.First do
   @subs %{"pool" => "outdoor pool"}
 
   @impl DataMerge.Hotels.Normaliser
+  @spec normalise(map :: Map.t()) :: DataMerge.Hotels.Hotel.t()
   def normalise(map) do
     {exact, near, unmatched} =
       map

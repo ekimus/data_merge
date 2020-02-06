@@ -3,23 +3,29 @@ defmodule DataMerge.Hotels.Resource do
   Resource for hotel data.
   """
 
-  def get(%{uri: uri, normaliser: normaliser}) do
-    case URI.parse(uri) do
-      %URI{scheme: "http"} ->
-        get(uri, normaliser, [])
+  defstruct normaliser: nil, uri: nil
 
-      %URI{scheme: "https"} ->
-        get(uri, normaliser, transport_opts: [ciphers: :ssl.cipher_suites(:default, :"tlsv1.2")])
-    end
-  end
+  @type t :: %__MODULE__{normaliser: module(), uri: String.t()}
 
-  defp get(uri, normaliser, opts) do
-    with {:ok, %Mojito.Response{body: body}} <- Mojito.get(uri, [], opts),
+  @type error :: %{reason: term(), uri: String.t()}
+
+  @spec get(resource :: t()) :: {:error, error()} | {:ok, [DataMerge.Hotels.Hotel.t()]}
+  def get(resource) do
+    opts =
+      case URI.parse(resource.uri) do
+        %URI{scheme: "http"} ->
+          []
+
+        %URI{scheme: "https"} ->
+          [transport_opts: [ciphers: :ssl.cipher_suites(:default, :"tlsv1.2")]]
+      end
+
+    with {:ok, %Mojito.Response{body: body}} <- Mojito.get(resource.uri, [], opts),
          {:ok, data} <-
            Jason.decode(body) do
-      {:ok, Enum.map(data, &normaliser.normalise/1)}
+      {:ok, Enum.map(data, &resource.normaliser.normalise/1)}
     else
-      {:error, %Mojito.Error{} = reason} -> {:error, %{uri: uri, reason: reason}}
+      {:error, reason} -> {:error, %{uri: resource.uri, reason: reason}}
     end
   end
 end

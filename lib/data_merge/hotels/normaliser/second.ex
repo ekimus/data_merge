@@ -10,7 +10,8 @@ defmodule DataMerge.Hotels.Normaliser.Second do
   require Logger
 
   @impl DataMerge.Hotels.Normaliser
-  def normalise(%{} = map) do
+  @spec normalise(map :: Map.t()) :: DataMerge.Hotels.Hotel.t()
+  def normalise(map) do
     {exact, near, unmatched} =
       map
       |> (&(Map.get(&1, "amenities", %{}) || %{})).()

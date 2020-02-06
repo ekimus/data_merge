@@ -37,7 +37,7 @@ defmodule DataMerge.Hotels.Hotel do
     |> put_assoc(:amenities, Map.get(attrs, :amenities, []))
   end
 
-  @spec reducer(map, map) :: map
+  @spec reducer(Map.t(), Map.t()) :: Map.t()
   def reducer(%{} = a, %{} = b), do: Map.merge(a, b, &merger/3)
 
   defp merger(_, nil, b), do: b
